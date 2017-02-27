@@ -74,6 +74,11 @@ describe("js scope", function(){
     var c = s.charAt(0);
     expect(c).toEqual("a");
     expect(typeof c).toEqual("string");
+    expect(s.charAt(1)).toEqual('b');
+    expect(s.charAt(2)).toEqual("c");
+    expect(s.charAt(3)).toEqual('');
+    expect(s.charAt(s.length)).toEqual("");
+    expect(s.charAt(5)).toEqual('');
   });
 
   it("string split", function(){

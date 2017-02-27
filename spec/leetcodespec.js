@@ -1456,7 +1456,7 @@ describe("leetcode", function(){
       if (!s && (p.length == 1 || p.charAt(1) != '*')) return false;
       if (s && (p.length == 1 || p.charAt(1) != '*')) {
         return (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.')
-            && isMatch(s.substring(1), p.substring(1)); 
+            && isMatch(s.substring(1), p.substring(1));
       }
       var i = 0;
       while (i < s.length && (s.charAt(i) == p.charAt(0) || p.charAt(0) == '.')) {
