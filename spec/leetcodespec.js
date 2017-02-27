@@ -1448,4 +1448,40 @@ describe("leetcode", function(){
     test(12344321, true);
     test(1000021, false);
   });
+
+  it("Regular Expression Matching", function(){
+    var isMatch = function(s, p){
+      if (!s && !p) return true;
+      if (!p) return false;
+      if (!s && (p.length == 1 || p.charAt(1) != '*')) return false;
+      if (s && (p.length == 1 || p.charAt(1) != '*')) {
+        return (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.')
+            && isMatch(s.substring(1), p.substring(1)); 
+      }
+      var i = 0;
+      while (i < s.length && (s.charAt(i) == p.charAt(0) || p.charAt(0) == '.')) {
+        if (isMatch(s.substring(i), p.substring(2))) return true;
+        i++;
+      }
+      return isMatch(s.substring(i), p.substring(2));
+    };
+
+    var test = function(s, p, ans){
+      var v = isMatch(s, p);
+      console.log(s, v ? "==" : "!=", p);
+      expect(v).toEqual(ans);
+    };
+
+    test("a", ".*..a*", false);
+    test("aa", "a", false);
+    test("aa", "aa", true);
+    test("aaa", "aa", false);
+    test("aa", "a*", true);
+    test("aa", ".*", true);
+    test("ab", ".*", true);
+    test("aab", "c*a*b", true);
+    test("a", "ab*", true);
+    test("", "c*c*", true);
+  });
+
 });

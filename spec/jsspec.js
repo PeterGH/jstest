@@ -104,6 +104,16 @@ describe("js scope", function(){
     expect(isEmpty("s")).toEqual(false);
   });
 
+  it ("string substring", function(){
+    var s = "str";
+    expect(s.substring(0)).toEqual("str");
+    expect(s.substring(1)).toEqual("tr");
+    expect(s.substring(2)).toEqual("r");
+    expect(s.substring(3)).toEqual("");
+    expect(s.substring(s.length)).toEqual("");
+    expect(s.substring(4)).toEqual("");
+  });
+
   it("Boolean", function(){
     var v = (5 > 3);
     expect(v).toBe(true);
