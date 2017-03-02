@@ -1,6 +1,6 @@
-describe("leetcode", function(){
+describe("leetcode", function () {
 
-  var randomArrayOfLength = function(length){
+  var randomArrayOfLength = function (length) {
     var a = [];
     var i;
     var v;
@@ -11,17 +11,17 @@ describe("leetcode", function(){
     return a;
   };
 
-  var randomArray = function(){
+  var randomArray = function () {
     var length = Math.floor(Math.random() * 100);
     return randomArrayOfLength(length);
   };
 
-  var randomArrayNotEmpty = function(){
+  var randomArrayNotEmpty = function () {
     var length = 1 + Math.floor(Math.random() * 100);
     return randomArrayOfLength(length);
   };
 
-  var randomStringOfLength = function(length){
+  var randomStringOfLength = function (length) {
     var alphabet = "abcdefghijklmnopqrstuvwxyz";
     var s = "";
     var i = 0;
@@ -33,13 +33,13 @@ describe("leetcode", function(){
     return s;
   };
 
-  var randomString = function(){
+  var randomString = function () {
     var length = 1 + Math.floor(Math.random() * 26);
     return randomStringOfLength(length);
   };
 
-  it("Two Sum", function(){
-    var twoSum = function(nums, target){
+  it("Two Sum", function () {
+    var twoSum = function (nums, target) {
       var result = [];
       var index = {};
       var i;
@@ -57,7 +57,7 @@ describe("leetcode", function(){
       return result;
     };
 
-    var test = function(nums, target, answer) {
+    var test = function (nums, target, answer) {
       var result = twoSum(nums, target);
       expect(result.length).toEqual(2);
       expect(result[0]).toEqual(answer[0]);
@@ -70,7 +70,7 @@ describe("leetcode", function(){
     test([1, 2, 3], 5, [1, 2]);
   });
 
-  it("Add Two Numbers", function(){
+  it("Add Two Numbers", function () {
     function ListNode(val) {
       this.val = val;
       this.next = null;
@@ -79,12 +79,12 @@ describe("leetcode", function(){
     // List head is the least significant digit
     // Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
     // Output: 7 -> 0 -> 8
-    var addTwoNumbers = function(l1, l2){
+    var addTwoNumbers = function (l1, l2) {
       var carry = 0;
       var list = null; // The head of the result list
       var current = null; // The current node of the result list
       var sum;
-      while (l1 != null || l2 != null || carry != 0)  {
+      while (l1 != null || l2 != null || carry != 0) {
         sum = carry;
         if (l1 != null) {
           sum += l1.val;
@@ -115,8 +115,8 @@ describe("leetcode", function(){
     // What if the the digits in the linked list are stored in non-reversed order?
     // The list head is the most significant digit. For example:
     // (3 -> 4 -> 2) + (4 -> 6 -> 5) = 8 -> 0 -> 7
-    var addTwoNumbers2 = function(l1, l2){
-      var addTwoNumbersSameLength = function(ls1, ls2, ls){
+    var addTwoNumbers2 = function (l1, l2) {
+      var addTwoNumbersSameLength = function (ls1, ls2, ls) {
         if (ls1 == null && ls2 == null) {
           return 0;
         }
@@ -172,7 +172,7 @@ describe("leetcode", function(){
       // (3) a = b1 -> ... -> null
       //         b2 -> ... -> null
 
-      var add = function(la, ln) {
+      var add = function (la, ln) {
         if (la == b1) {
           return addTwoNumbersSameLength(b1, b2, ln);
         }
@@ -201,7 +201,7 @@ describe("leetcode", function(){
     // What if the the digits in the linked list are stored in non-reversed order?
     // The list head is the most significant digit. For example:
     // (3 -> 4 -> 2) + (4 -> 6 -> 5) = 8 -> 0 -> 7
-    var addTwoNumbers3 = function(l1, l2) {
+    var addTwoNumbers3 = function (l1, l2) {
       if (l1 == null && l2 == null) return null;
       var a1 = [];
       var a2 = [];
@@ -234,7 +234,7 @@ describe("leetcode", function(){
       return list;
     };
 
-    var arrayToList = function(a){
+    var arrayToList = function (a) {
       var l = null;
       var c = null;
       var i;
@@ -252,7 +252,7 @@ describe("leetcode", function(){
       return l;
     };
 
-    var listToArray = function(l){
+    var listToArray = function (l) {
       var a = [];
       while (l != null) {
         a.push(l.val);
@@ -261,7 +261,7 @@ describe("leetcode", function(){
       return a;
     };
 
-    var test = function(a1, a2, answer){
+    var test = function (a1, a2, answer) {
       var l1 = arrayToList(a1);
       var l2 = arrayToList(a2);
       var l = addTwoNumbers(l1, l2);
@@ -301,7 +301,7 @@ describe("leetcode", function(){
     test([5], [5], [0, 1]);
     test([9, 9], [1], [0, 0, 1]);
 
-    var testRandom = function(){
+    var testRandom = function () {
       var a1 = randomArray();
       var a2 = randomArray();
 
@@ -339,7 +339,7 @@ describe("leetcode", function(){
     }
   });
 
-  it("Longest Substring Without Repeating Characters", function(){
+  it("Longest Substring Without Repeating Characters", function () {
     // Given a string, find the length of the longest substring without repeating
     // characters.
     // Examples:
@@ -348,7 +348,7 @@ describe("leetcode", function(){
     // Given "pwwkew", the answer is "wke", with the length of 3. Note that the
     // answer must be a substring, "pwke" is a subsequence and not a substring.
 
-    var lengthOfLongestSubstring = function(s) {
+    var lengthOfLongestSubstring = function (s) {
       if (s == undefined || s == null || s == "") return 0;
       var chars = s.split("");
       var map = {};
@@ -373,7 +373,7 @@ describe("leetcode", function(){
       return end - begin + 1;
     };
 
-    var lengthOfLongestSubstring2 = function(s) {
+    var lengthOfLongestSubstring2 = function (s) {
       if (s == undefined || s == null || s == "") return 0;
       var chars = s.split("");
       var map = {};
@@ -394,7 +394,7 @@ describe("leetcode", function(){
       return end - begin + 1;
     };
 
-    var test = function(s, answer) {
+    var test = function (s, answer) {
       var l = lengthOfLongestSubstring(s);
       var l2 = lengthOfLongestSubstring2(s);
       expect(l).toEqual(answer);
@@ -421,9 +421,9 @@ describe("leetcode", function(){
     test("abcdabcd", 4);
   });
 
-  it("Median of Two Sorted Arrays", function(){
+  it("Median of Two Sorted Arrays", function () {
 
-    var findMedianSortedArrays = function(nums1, nums2) {
+    var findMedianSortedArrays = function (nums1, nums2) {
       var as;
       var al;
       if (nums1.length < nums2.length) {
@@ -450,7 +450,7 @@ describe("leetcode", function(){
         }
       }
 
-      var median = function(a1, i, a2, j, unique) {
+      var median = function (a1, i, a2, j, unique) {
         // assume a1[i] <= a2[j]
         // a1[i] is a potential median
         if (unique) return a1[i];
@@ -504,7 +504,7 @@ describe("leetcode", function(){
     };
 
     // Second version of findMedianSortedArrays
-    var findMedianSortedArrays_2 = function(nums1, nums2) {
+    var findMedianSortedArrays_2 = function (nums1, nums2) {
       var as;
       var al;
       if (nums1.length < nums2.length) {
@@ -523,7 +523,7 @@ describe("leetcode", function(){
       // as.length <= m < as.length + al.length - 1, otherwise
       var hasOneMedian = (((h + 1) % 2) == 1);
 
-      var median = function(a1, i, a2, j, unique) {
+      var median = function (a1, i, a2, j, unique) {
         // assume a1[i] <= a2[j]
         // a1[i] is a potential median
         if (unique) return a1[i];
@@ -587,7 +587,7 @@ describe("leetcode", function(){
     };
 
     // This is the first version of findMedianSortedArrays
-    var findMedianSortedArrays_1 = function(nums1, nums2) {
+    var findMedianSortedArrays_1 = function (nums1, nums2) {
       var as;
       var al;
       if (nums1.length < nums2.length) {
@@ -718,7 +718,7 @@ describe("leetcode", function(){
       }
     };
 
-    var findMedianSortedArrays2 = function(nums1, nums2) {
+    var findMedianSortedArrays2 = function (nums1, nums2) {
       var l = 0;
       var h = nums1.length + nums2.length - 1;
       var m = Math.floor((l + h) / 2); // lower median index
@@ -726,7 +726,7 @@ describe("leetcode", function(){
         return (nums1[0] + nums2[0]) / 2;
       }
 
-      var median = function(a1, i, a2, j, unique) {
+      var median = function (a1, i, a2, j, unique) {
         // assume a2[j - 1] <= a1[i]
         // a1[i] is a potential medain
         // Need to compare following numbers
@@ -774,7 +774,7 @@ describe("leetcode", function(){
     };
 
     // First version of findMedianSortedArrays2
-    var findMedianSortedArrays2_1 = function(nums1, nums2) {
+    var findMedianSortedArrays2_1 = function (nums1, nums2) {
       var l = 0;
       var h = nums1.length + nums2.length - 1;
       var m = Math.floor((l + h) / 2); // lower median index
@@ -865,9 +865,9 @@ describe("leetcode", function(){
       }
     };
 
-    var findMedianSortedArrays3 = function(nums1, nums2) {
+    var findMedianSortedArrays3 = function (nums1, nums2) {
       var a = nums1.concat(nums2);
-      a.sort(function(x, y) { return x - y; });
+      a.sort(function (x, y) { return x - y; });
       var m = Math.floor((a.length - 1) / 2);
       if (a.length % 2 == 1) {
         return a[m];
@@ -876,8 +876,8 @@ describe("leetcode", function(){
       }
     };
 
-    var findMedianSortedArrays4 = function(nums1, nums2) {
-      var medianOddOdd = function(a1, l1, m1, h1, a2, l2, m2, h2) {
+    var findMedianSortedArrays4 = function (nums1, nums2) {
+      var medianOddOdd = function (a1, l1, m1, h1, a2, l2, m2, h2) {
         // a1[m1] <= a2[m2]
         //               m1 m1+1 m1+2
         //     m2-2 m2-1 m2
@@ -902,7 +902,7 @@ describe("leetcode", function(){
         } else { // l1 < m1 && m1 < h1
           if (l2 == m2 && m2 == h2) {
             return (a1[m1] + a2[m2]) / 2;
-          } else if (l2 == m2 && m2 < h2){
+          } else if (l2 == m2 && m2 < h2) {
             return (a1[m1] + Math.min(a1[m1 + 1], a2[m2])) / 2;
           } else { // l2 < m2 && m2 < h2
             if (a1[m1 + 1] >= a2[m2]) {
@@ -916,7 +916,7 @@ describe("leetcode", function(){
         }
       };
 
-      var medianEvenEven = function(a1, l1, lm1, hm1, h1, a2, l2, lm2, hm2, h2) {
+      var medianEvenEven = function (a1, l1, lm1, hm1, h1, a2, l2, lm2, hm2, h2) {
         // a1[lm1] <= a2[lm2]
         //               lm1 hm1 hm1+1
         //   lm2-2 lm2-1 lm2 hm2 hm2+1
@@ -949,7 +949,7 @@ describe("leetcode", function(){
         }
       };
 
-      var medianOddEven = function(a1, l1, m1, h1, a2, l2, lm2, hm2, h2) {
+      var medianOddEven = function (a1, l1, m1, h1, a2, l2, lm2, hm2, h2) {
         //               m1 m1+1 m1+2
         //  lm2-2 lm2-1 lm2 hm2 hm2+1
         if (l1 == m1 && m1 == h1) {
@@ -1041,20 +1041,20 @@ describe("leetcode", function(){
           }
         } else if (lm1 == hm1 && lm2 < hm2) {
 
-        } else if (lm1 < hm1 && lm2 == hm2){
+        } else if (lm1 < hm1 && lm2 == hm2) {
 
         }
 
       }
     };
 
-    var test = function(nums1, nums2, answer) {
+    var test = function (nums1, nums2, answer) {
       var median = findMedianSortedArrays(nums1, nums2);
       var median2 = findMedianSortedArrays2(nums1, nums2);
       var median3 = findMedianSortedArrays3(nums1, nums2);
       if (median != answer ||
-          median2 != answer ||
-          median3 != answer) {
+        median2 != answer ||
+        median3 != answer) {
         console.log(nums1);
         console.log(nums2);
         console.log(median + " : " + median2 + " : " + median3);
@@ -1064,12 +1064,12 @@ describe("leetcode", function(){
       expect(median3).toEqual(answer);
     };
 
-    var test2 = function(nums1, nums2) {
+    var test2 = function (nums1, nums2) {
       var median = findMedianSortedArrays(nums1, nums2);
       var median2 = findMedianSortedArrays2(nums1, nums2);
       var median3 = findMedianSortedArrays3(nums1, nums2);
       if (median != median2 ||
-          median != median3) {
+        median != median3) {
         console.log(nums1);
         console.log(nums2);
         console.log(median + " : " + median2 + " : " + median3);
@@ -1117,7 +1117,7 @@ describe("leetcode", function(){
     test([6, 7], [8, 8, 9, 10], 8);
 
     var i;
-    var compare = function(x, y) { return x - y; };
+    var compare = function (x, y) { return x - y; };
     for (i = 0; i < 10000; i++) {
       var a1 = randomArrayNotEmpty();
       var a2 = randomArrayNotEmpty();
@@ -1128,13 +1128,13 @@ describe("leetcode", function(){
 
   });
 
-  it("Longest Palindromic Substring", function(){
-    var longestPalindrome1 = function(s) {
+  it("Longest Palindromic Substring", function () {
+    var longestPalindrome1 = function (s) {
       var map = {};
       var begin = 0;
       var end = 0;
 
-      var isParlindrom = function(i, j) {
+      var isParlindrom = function (i, j) {
         if (map.hasOwnProperty(i) && map[i].hasOwnProperty(j)) {
           return true;
         }
@@ -1162,15 +1162,15 @@ describe("leetcode", function(){
         return is;
       };
 
-      isParlindrom(0, s.length-1);
+      isParlindrom(0, s.length - 1);
       return s.substring(begin, end + 1);
     };
 
-    var longestPalindrome2 = function(s) {
+    var longestPalindrome2 = function (s) {
       var begin = 0;
       var end = 0;
 
-      var expand = function(i, j) {
+      var expand = function (i, j) {
         while (0 <= i && j <= s.length - 1 && s.charAt(i) == s.charAt(j)) {
           i--;
           j++;
@@ -1190,7 +1190,7 @@ describe("leetcode", function(){
       return s.substring(begin, end + 1);
     };
 
-    var test1 = function(s, ans) {
+    var test1 = function (s, ans) {
       var p1 = longestPalindrome1(s);
       var p2 = longestPalindrome2(s);
       expect(p1).toEqual(ans);
@@ -1213,7 +1213,7 @@ describe("leetcode", function(){
     test1("abaa", "aba");
     test1("baaa", "aaa");
 
-    var test2 = function(s) {
+    var test2 = function (s) {
       console.log("Input: " + s);
       var p1 = longestPalindrome1(s);
       var p2 = longestPalindrome2(s);
@@ -1227,8 +1227,8 @@ describe("leetcode", function(){
     }
   });
 
-  it("ZigZag Conversion", function(){
-    var convert = function(s, numRows) {
+  it("ZigZag Conversion", function () {
+    var convert = function (s, numRows) {
       if (s == "") return s;
       if (numRows == 1) return s;
       var z = "";
@@ -1251,7 +1251,7 @@ describe("leetcode", function(){
       return z;
     };
 
-    var test = function(s, numRows, ans) {
+    var test = function (s, numRows, ans) {
       var z = convert(s, numRows);
       expect(z).toEqual(ans);
     };
@@ -1268,8 +1268,8 @@ describe("leetcode", function(){
     test("abcdefg", 9, "abcdefg");
   });
 
-  it("Reverse Integer", function(){
-    var reverse = function(x) {
+  it("Reverse Integer", function () {
+    var reverse = function (x) {
       var negative = false;
       if (x < 0) {
         negative = true;
@@ -1289,7 +1289,7 @@ describe("leetcode", function(){
       return negative ? -y : y;
     };
 
-    var test = function(x, ans) {
+    var test = function (x, ans) {
       var y = reverse(x);
       expect(y).toEqual(ans);
     };
@@ -1312,11 +1312,11 @@ describe("leetcode", function(){
     test(-9563847412, 0);
   });
 
-  it("String to Integer (atoi)", function(){
-    var atoi = function(str){
+  it("String to Integer (atoi)", function () {
+    var atoi = function (str) {
       if (!str) return 0;
 
-      var isDigit = function(c){
+      var isDigit = function (c) {
         return ('0' <= c && c <= '9');
       };
 
@@ -1358,7 +1358,7 @@ describe("leetcode", function(){
       return (isNegative ? -n : n);
     };
 
-    var test = function(str, ans){
+    var test = function (str, ans) {
       var n = atoi(str);
       expect(n).toEqual(ans);
     };
@@ -1393,8 +1393,8 @@ describe("leetcode", function(){
     test("12x", 12);
   });
 
-  it("Palindrome Number", function(){
-    var isParlindrom = function(x){
+  it("Palindrome Number", function () {
+    var isParlindrom = function (x) {
       if (x < 0) return false;
       var b = 1;
       while (b < x) {
@@ -1414,7 +1414,7 @@ describe("leetcode", function(){
       return true;
     };
 
-    var test = function(x, ans){
+    var test = function (x, ans) {
       var r = isParlindrom(x);
       expect(r).toEqual(ans);
     };
@@ -1449,14 +1449,14 @@ describe("leetcode", function(){
     test(1000021, false);
   });
 
-  it("Regular Expression Matching", function(){
-    var isMatch = function(s, p){
+  it("Regular Expression Matching", function () {
+    var isMatch = function (s, p) {
       if (!s && !p) return true;
       if (!p) return false;
       if (!s && (p.length == 1 || p.charAt(1) != '*')) return false;
       if (s && (p.length == 1 || p.charAt(1) != '*')) {
         return (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.')
-            && isMatch(s.substring(1), p.substring(1));
+          && isMatch(s.substring(1), p.substring(1));
       }
       var i = 0;
       while (i < s.length && (s.charAt(i) == p.charAt(0) || p.charAt(0) == '.')) {
@@ -1466,7 +1466,7 @@ describe("leetcode", function(){
       return isMatch(s.substring(i), p.substring(2));
     };
 
-    var test = function(s, p, ans){
+    var test = function (s, p, ans) {
       var v = isMatch(s, p);
       console.log(s, v ? "==" : "!=", p);
       expect(v).toEqual(ans);
@@ -1484,4 +1484,179 @@ describe("leetcode", function(){
     test("", "c*c*", true);
   });
 
+  describe("Container with Most Water", function () {
+
+    it("Container can be formed by any two lines", function () {
+      var maxArea = function (height) {
+        var area = 0;
+        var l = 0;
+        var r = height.length - 1;
+        while (l < r) {
+          area = Math.max(area, Math.min(height[l], height[r]) * (r - l));
+          if (height[l] < height[r]) l++;
+          else r--;
+        }
+        return area;
+      };
+
+      var maxArea2 = function (height) {
+        var area = 0;
+        var i, j;
+        for (i = 0; i < height.length - 1; i++) {
+          for (j = i + 1; j < height.length; j++) {
+            area = Math.max(area, Math.min(height[i], height[j]) * (j - i));
+          }
+        }
+        return area;
+      };
+
+      var test = function () {
+        var i = 0;
+        var length;
+        var height;
+        for (i = 0; i < 100; i++) {
+          length = 2 + Math.floor(Math.random() * 50);
+          height = randomArrayOfLength(length);
+          var a = maxArea(height);
+          var a2 = maxArea2(height);
+          expect(a).toEqual(a2);
+        };
+
+        test();
+      };
+    });
+
+    it("Container can be formed by two lines such that any lines in between are not longer than these two lines",
+      function () {
+        var maxArea = function (height) {
+          var area = 0;
+          var left, right;
+          var lines = [];
+          lines.push(0);
+          var i;
+          var top;
+          var a;
+          var l, r;
+          for (i = 1; i < height.length; i++) {
+            while (lines.length > 0 && height[lines[lines.length - 1]] < height[i]) {
+              top = lines.pop();
+            }
+            if (lines.length == 0) {
+              // [], 9
+              a = (i - top) * height[top];
+              l = top;
+              r = i;
+            } else if (height[lines[lines.length - 1]] == height[i]) {
+              if (lines.length > 1) {
+                if (height[lines[lines.length - 2]] == height[i]) {
+                  // 9, 9], 9
+                  lines.pop();
+                }
+                if (lines.length > 1) {
+                  // 10. 9], 9
+                  a = (i - lines[lines.length - 2]) * height[i];
+                  l = lines[lines.length - 2];
+                  r = i;
+                } else {
+                  // [9], 9
+                  a = (i - lines[lines.length - 1]) * height[i];
+                  l = lines[lines.length - 1];
+                  r = i;
+                }
+              } else {
+                // [9], 9
+                a = (i - lines[lines.length - 1]) * height[i];
+                l = lines[lines.length - 1];
+                r = i;
+              }
+            } else {
+              // 10], 9
+              a = (i - lines[lines.length - 1]) * height[i];
+              l = lines[lines.length - 1];
+              r = i;
+            }
+            lines.push(i);
+            if (area < a) {
+              area = a;
+              left = l;
+              right = r;
+            }
+          }
+
+          return area;
+        };
+
+        var maxArea2 = function (height) {
+          var area = 0;
+          var left, right;
+          var i, j, k;
+          var h;
+          var a;
+          var validContainer;
+          for (i = 0; i < height.length - 1; i++) {
+            for (j = i + 1; j < height.length; j++) {
+              h = Math.min(height[i], height[j]);
+              validContainer = true;
+              for (k = i + 1; k < j; k++) {
+                if (height[k] > h) {
+                  validContainer = false;
+                  break;
+                }
+              }
+              if (validContainer == true) {
+                a = h * (j - i);
+                if (area < a) {
+                  area = a;
+                  left = i;
+                  right = j;
+                }
+              }
+            }
+          }
+
+          return area;
+        };
+
+        var test = function (height, ans) {
+          var a = maxArea(height);
+          var a2 = maxArea2(height);
+          expect(a).toEqual(ans);
+          expect(a2).toEqual(ans);
+        };
+
+        test([1, 2], 1);
+        test([1, 1], 1);
+        test([2, 1], 1);
+        test([1, 2, 4], 2);
+        test([5, 3, 2], 3);
+        test([1, 2, 1], 1);
+        test([1, 3, 2], 2);
+        test([2, 3, 1], 2);
+        test([2, 1, 3], 4);
+        test([3, 1, 2], 4);
+        test([2, 2, 3], 4);
+        test([3, 2, 2], 4);
+        test([2, 2, 2], 4);
+        test([1, 2, 1, 2], 4);
+        test([1, 2, 1, 3], 4);
+        test([1, 3, 2, 3], 6);
+        test([5, 3, 4, 2], 8);
+        test([9, 9, 8], 9);
+
+        var test2 = function () {
+          var i = 0;
+          var length;
+          var height;
+          for (i = 0; i < 1000; i++) {
+            length = 2 + Math.floor(Math.random() * 50);
+            height = randomArrayOfLength(length);
+            var a = maxArea(height);
+            var a2 = maxArea2(height);
+            expect(a).toEqual(a2);
+          }
+        };
+
+        test2();
+      });
+  });
 });
