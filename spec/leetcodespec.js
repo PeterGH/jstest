@@ -1,15 +1,24 @@
 describe("leetcode", function () {
 
-  var randomArrayOfLength = function (length) {
+  var randomArrayOfLengthMinMax = function (length, min, max) {
     var a = [];
     var i;
     var v;
     for (i = 0; i < length; i++) {
-      v = Math.floor(Math.random() * 10);
+      v = min + Math.floor(Math.random() * (max - min));
       a.push(v);
     }
     return a;
   };
+
+  var randomArrayOfLength = function (length) {
+    return randomArrayOfLengthMinMax(length, 0, 10);
+  };
+
+  var randomArrayOfMinMax = function (min, max) {
+    var length = Math.floor(Math.random() * 100);
+    return randomArrayOfLengthMinMax(length, min, max);
+  }
 
   var randomArray = function () {
     var length = Math.floor(Math.random() * 100);
@@ -1658,5 +1667,144 @@ describe("leetcode", function () {
 
         test2();
       });
+  });
+
+  it("Container Water Volume", function () {
+    // Given n non-negative integers a1, a2, ..., an,
+    // where each represents a point at coordinate (i, ai).
+    // n vertical lines are drawn such that the two endpoints
+    // of line i is at (i, ai) and (i, 0). With these lines,
+    // find the total volume of water can be contained.
+
+    var totalVolume = function (height) {
+      var search = function (l, r) {
+        if (l == r) return 0;
+        if (l + 1 == r) {
+          return Math.min(height[l], height[r]);
+        }
+        var h1 = -1, h2 = -1;
+        var i1, i2;
+        var i;
+        for (i = l; i <= r; i++) {
+          if (height[i] > h1) {
+            h1 = height[i];
+            i1 = i;
+            if (h1 > h2) {
+              h1 = h2;
+              i1 = i2;
+              h2 = height[i];
+              i2 = i;
+            }
+          }
+        }
+        var volume = Math.min(height[i1], height[i2]) * Math.abs(i1 - i2);
+        volume += search(l, Math.min(i1, i2));
+        volume += search(Math.max(i1, i2), r);
+        return volume;
+      };
+      return search(0, height.length - 1);
+    };
+
+    var totalVolume2 = function (height) {
+      var x = [];
+      var i;
+      for (i = 0; i < height.length; i++) {
+        x.push(i);
+      }
+      var removedCount;
+      do {
+        removedCount = 0;
+        i = 1;
+        while (i < x.length - 1) {
+          if (height[x[i - 1]] >= height[x[i]]
+            && height[x[i]] <= height[x[i + 1]]) {
+            x.splice(i, 1);
+            removedCount++;
+          }
+          i++;
+        }
+      } while (removedCount > 0);
+      var volume = 0;
+      for (i = 0; i < x.length - 1; i++) {
+        volume += (Math.min(height[x[i]], height[x[i + 1]]) * (x[i + 1] - x[i]));
+      }
+      return volume;
+    };
+
+    var totalVolume3 = function (height) {
+      var x = [];
+      var map = {};
+      map[0] = 0;
+      x.push(0);
+      var i;
+      var m = 0;
+      var volume = 0;
+      var v;
+      for (i = 1; i < height.length; i++) {
+        while (m < x[x.length - 1] && height[x[x.length - 1]] < height[i]) {
+          var t = x.pop();
+          v = map[t];
+          delete map[t];
+          volume -= v;
+        }
+        v = Math.min(height[x[x.length - 1]], height[i]) * (i - x[x.length - 1]);
+        map[i] = v;
+        x.push(i);
+        volume += v;
+        if (height[i] >= height[m]) {
+          m = i;
+        }
+      }
+      return volume;
+    };
+
+    var test = function (height, ans) {
+      var v = totalVolume(height);
+      var v2 = totalVolume2(height);
+      var v3 = totalVolume3(height);
+      console.log(height);
+      console.log(v, v2, v3);
+      expect(v).toEqual(ans);
+      expect(v2).toEqual(ans);
+      expect(v3).toEqual(ans);
+    };
+
+    test([1, 1], 1);
+    test([1, 2], 1);
+    test([2, 1], 1);
+    test([2, 2], 2);
+    test([2, 2, 2], 4);
+    test([2, 3, 2], 4);
+    test([2, 1, 2], 4);
+    test([1, 2, 2], 3);
+    test([2, 2, 1], 3);
+    test([1, 2, 3, 4], 6);
+    test([4, 3, 2, 1], 6);
+    test([1, 3, 2, 4], 7);
+    test([1, 4, 3, 2], 6);
+    test([1, 3, 4, 2], 6);
+    test([1, 2, 4, 3], 6);
+    test([1, 4, 2, 3], 7);
+    test([2, 2, 2, 2], 6);
+    test([2, 3, 2, 2], 6);
+    test([2, 3, 2, 3], 8);
+    test([3, 2, 3, 2], 8);
+    test([3, 2, 2, 3], 9);
+
+    var test2 = function () {
+      for (var i = 0; i < 100; i++) {
+        var length = 2 + Math.floor(Math.random() * 100);
+        var height = randomArrayOfLengthMinMax(length, 0, 100);
+        var v = totalVolume(height);
+        var v2 = totalVolume2(height);
+        var v3 = totalVolume3(height);
+        console.log(height);
+        console.log(v, v2, v3);
+        expect(v).toEqual(v2);
+        expect(v).toEqual(v3);
+      }
+    };
+
+    test2();
   });
 });
