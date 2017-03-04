@@ -1,7 +1,7 @@
-describe("js scope", function(){
+describe("js scope", function () {
 
-  it("allows eval() to update scope", function(){
-    function callEval(str, c){
+  it("allows eval() to update scope", function () {
+    function callEval(str, c) {
       var b = 1;
       eval(str);
       return a + b + c;
@@ -15,7 +15,7 @@ describe("js scope", function(){
     expect(r).toEqual(5);
   });
 
-  it("allows to seal or freeze an object", function(){
+  it("allows to seal or freeze an object", function () {
     var o = {
       a: 1,
       b: 2
@@ -50,7 +50,7 @@ describe("js scope", function(){
     expect(o.b).toEqual(4);
   });
 
-  it("associative array", function(){
+  it("associative array", function () {
     var map = {};
     for (var i = 0; i < 10; i++) {
       map[i] = i * 2;
@@ -69,7 +69,7 @@ describe("js scope", function(){
     expect(map.hasOwnProperty(0)).toEqual(false);
   });
 
-  it("string charAt", function(){
+  it("string charAt", function () {
     var s = "abc";
     var c = s.charAt(0);
     expect(c).toEqual("a");
@@ -81,7 +81,7 @@ describe("js scope", function(){
     expect(s.charAt(5)).toEqual('');
   });
 
-  it("string split", function(){
+  it("string split", function () {
     var ss = ["", "This is a string!"];
     var i;
     var j;
@@ -94,8 +94,8 @@ describe("js scope", function(){
     }
   });
 
-  it("string empty", function(){
-    var isEmpty = function(s){
+  it("string empty", function () {
+    var isEmpty = function (s) {
       if (!s) {
         return true;
       }
@@ -109,7 +109,7 @@ describe("js scope", function(){
     expect(isEmpty("s")).toEqual(false);
   });
 
-  it ("string substring", function(){
+  it("string substring", function () {
     var s = "str";
     expect(s.substring(0)).toEqual("str");
     expect(s.substring(1)).toEqual("tr");
@@ -119,20 +119,44 @@ describe("js scope", function(){
     expect(s.substring(4)).toEqual("");
   });
 
-  it("Boolean", function(){
+  it("Boolean", function () {
     var v = (5 > 3);
     expect(v).toBe(true);
   });
 
-  it("sorts array by string values", function(){
+  it("sorts array by string values", function () {
     var a = [1, 2, 10];
     a.sort();
     expect(a[0]).toEqual(1);
     expect(a[1]).toEqual(10);
     expect(a[2]).toEqual(2);
-    a.sort(function(x, y) { return x - y; });
+    a.sort(function (x, y) { return x - y; });
     expect(a[0]).toEqual(1);
     expect(a[1]).toEqual(2);
     expect(a[2]).toEqual(10);
+  });
+
+  it("function parameter", function () {
+    var f = function (x) {
+      expect(x).toEqual(1);
+      x = 2;
+      expect(x).toEqual(2);
+    };
+    var x = 1;
+    expect(x).toEqual(1);
+    f(x);
+    expect(x).toEqual(1);
+
+    var f2 = function (o) {
+      expect(o.x).toEqual(3);
+      o.x = 4;
+      expect(o.x).toEqual(4);
+    };
+
+    var o = {};
+    o.x = 3;
+    expect(o.x).toEqual(3);
+    f2(o);
+    expect(o.x).toEqual(4);
   });
 });

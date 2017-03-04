@@ -1807,4 +1807,236 @@ describe("leetcode", function () {
 
     test2();
   });
+
+  it("Integer to Roman", function () {
+    var intToRoman = function (num) {
+      var roman = "";
+      var r;
+      if (num >= 1000) {
+        r = Math.floor(num / 1000);
+        num = num - r * 1000;
+        var i;
+        for (i = 0; i < r; i++) roman += "M";
+      }
+      if (num >= 100) {
+        r = Math.floor(num / 100);
+        num = num - r * 100;
+        switch (r) {
+          case 9:
+            roman += "CM";
+            break;
+          case 8:
+            roman += "DCCC";
+            break;
+          case 7:
+            roman += "DCC";
+            break;
+          case 6:
+            roman += "DC";
+            break;
+          case 5:
+            roman += "D";
+            break;
+          case 4:
+            roman += "CD";
+            break;
+          case 3:
+            roman += "CCC";
+            break;
+          case 2:
+            roman += "CC";
+            break;
+          case 1:
+            roman += "C";
+            break;
+        }
+      }
+      if (num >= 10) {
+        r = Math.floor(num / 10);
+        num = num - r * 10;
+        switch (r) {
+          case 9:
+            roman += "XC";
+            break;
+          case 8:
+            roman += "LXXX";
+            break;
+          case 7:
+            roman += "LXX";
+            break;
+          case 6:
+            roman += "LX";
+            break;
+          case 5:
+            roman += "L";
+            break;
+          case 4:
+            roman += "XL";
+            break;
+          case 3:
+            roman += "XXX";
+            break;
+          case 2:
+            roman += "XX";
+            break;
+          case 1:
+            roman += "X";
+            break;
+        }
+      }
+      if (num >= 0) {
+        r = Math.floor(num);
+        switch (r) {
+          case 9:
+            roman += "IX";
+            break;
+          case 8:
+            roman += "VIII";
+            break;
+          case 7:
+            roman += "VII";
+            break;
+          case 6:
+            roman += "VI";
+            break;
+          case 5:
+            roman += "V";
+            break;
+          case 4:
+            roman += "IV";
+            break;
+          case 3:
+            roman += "III";
+            break;
+          case 2:
+            roman += "II";
+            break;
+          case 1:
+            roman += "I";
+            break;
+        }
+      }
+      return roman;
+    };
+
+    var test = function (num, ans) {
+      var r = intToRoman(num);
+      expect(r).toEqual(ans);
+    };
+
+    {
+      test(1, "I");
+      test(2, "II");
+      test(3, "III");
+      test(4, "IV");
+      test(5, "V");
+      test(6, "VI");
+      test(7, "VII");
+      test(8, "VIII");
+      test(9, "IX");
+      test(10, "X");
+      test(11, "XI");
+      test(12, "XII");
+      test(13, "XIII");
+      test(14, "XIV");
+      test(15, "XV");
+      test(16, "XVI");
+      test(17, "XVII");
+      test(18, "XVIII");
+      test(19, "XIX");
+      test(20, "XX");
+      test(21, "XXI");
+      test(22, "XXII");
+      test(23, "XXIII");
+      test(24, "XXIV");
+      test(25, "XXV");
+      test(26, "XXVI");
+      test(27, "XXVII");
+      test(28, "XXVIII");
+      test(29, "XXIX");
+      test(30, "XXX");
+      test(31, "XXXI");
+      test(32, "XXXII");
+      test(33, "XXXIII");
+      test(34, "XXXIV");
+      test(35, "XXXV");
+      test(36, "XXXVI");
+      test(37, "XXXVII");
+      test(38, "XXXVIII");
+      test(39, "XXXIX");
+      test(40, "XL");
+      test(41, "XLI");
+      test(42, "XLII");
+      test(43, "XLIII");
+      test(44, "XLIV");
+      test(45, "XLV");
+      test(46, "XLVI");
+      test(47, "XLVII");
+      test(48, "XLVIII");
+      test(49, "XLIX");
+      test(50, "L");
+      test(51, "LI");
+      test(52, "LII");
+      test(53, "LIII");
+      test(54, "LIV");
+      test(55, "LV");
+      test(56, "LVI");
+      test(57, "LVII");
+      test(58, "LVIII");
+      test(59, "LIX");
+      test(60, "LX");
+      test(61, "LXI");
+      test(62, "LXII");
+      test(63, "LXIII");
+      test(64, "LXIV");
+      test(65, "LXV");
+      test(66, "LXVI");
+      test(67, "LXVII");
+      test(68, "LXVIII");
+      test(69, "LXIX");
+      test(70, "LXX");
+      test(71, "LXXI");
+      test(72, "LXXII");
+      test(73, "LXXIII");
+      test(74, "LXXIV");
+      test(75, "LXXV");
+      test(76, "LXXVI");
+      test(77, "LXXVII");
+      test(78, "LXXVIII");
+      test(79, "LXXIX");
+      test(80, "LXXX");
+      test(81, "LXXXI");
+      test(82, "LXXXII");
+      test(83, "LXXXIII");
+      test(84, "LXXXIV");
+      test(85, "LXXXV");
+      test(86, "LXXXVI");
+      test(87, "LXXXVII");
+      test(88, "LXXXVIII");
+      test(89, "LXXXIX");
+      test(90, "XC");
+      test(91, "XCI");
+      test(92, "XCII");
+      test(93, "XCIII");
+      test(94, "XCIV");
+      test(95, "XCV");
+      test(96, "XCVI");
+      test(97, "XCVII");
+      test(98, "XCVIII");
+      test(99, "XCIX");
+      test(100, "C");
+      test(200, "CC");
+      test(300, "CCC");
+      test(400, "CD");
+      test(500, "D");
+      test(600, "DC");
+      test(700, "DCC");
+      test(800, "DCCC");
+      test(900, "CM");
+      test(1000, "M");
+      test(2000, "MM");
+      test(3000, "MMM");
+      test(4000, "MMMM");
+    }
+  });
 });
