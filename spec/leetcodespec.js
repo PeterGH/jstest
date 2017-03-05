@@ -47,6 +47,10 @@ describe("leetcode", function () {
     return randomStringOfLength(length);
   };
 
+  var randomInt = function (min, max) {
+    return Math.floor(min + Math.random() * (max - min));
+  };
+
   it("Two Sum", function () {
     var twoSum = function (nums, target) {
       var result = [];
@@ -1919,9 +1923,92 @@ describe("leetcode", function () {
       return roman;
     };
 
+    var intToRoman2 = function (num) {
+      var roman = {
+        1000: "M",
+        900: "CM",
+        800: "DCCC",
+        700: "DCC",
+        600: "DC",
+        500: "D",
+        400: "CD",
+        300: "CCC",
+        200: "CC",
+        100: "C",
+        90: "XC",
+        80: "LXXX",
+        70: "LXX",
+        60: "LX",
+        50: "L",
+        40: "XL",
+        30: "XXX",
+        20: "XX",
+        10: "X",
+        9: "IX",
+        8: "VIII",
+        7: "VII",
+        6: "VI",
+        5: "V",
+        4: "IV",
+        3: "III",
+        2: "II",
+        1: "I"
+      };
+
+      var r = "";
+      var b = Math.floor(num / 1000);
+      for (var i = 0; i < b; i++) {
+        r += "M";
+      }
+      num = num % 1000;
+      b = 100;
+      var x;
+      while (num > 0 && b > 0) {
+        if (num >= b) {
+          x = num % b;
+          r += roman[num - x];
+          num = x;
+        }
+        // Must use Math.floor. Othewise it may be greater than 0 forever.
+        b = Math.floor(b / 10);
+      }
+
+      return r;
+    };
+
+    var romanToInt = function (s) {
+      var roman = {
+        I: 1,
+        V: 5,
+        X: 10,
+        L: 50,
+        C: 100,
+        D: 500,
+        M: 1000
+      };
+      var r = 0;
+      var i = 0;
+      while (i < s.length) {
+        if (i + 1 < s.length
+          && roman[s.charAt(i)] < roman[s.charAt(i + 1)]) {
+          r += (roman[s.charAt(i + 1)] - roman[s.charAt(i)]);
+          i += 2;
+        } else {
+          r += roman[s.charAt(i)];
+          i++;
+        }
+      }
+      return r;
+    };
+
     var test = function (num, ans) {
       var r = intToRoman(num);
+      var r2 = intToRoman2(num);
+      var n = romanToInt(r);
+      console.log(num, "->", r, r2, "->", n);
       expect(r).toEqual(ans);
+      expect(r2).toEqual(ans);
+      expect(n).toEqual(num);
     };
 
     {
@@ -2038,5 +2125,23 @@ describe("leetcode", function () {
       test(3000, "MMM");
       test(4000, "MMMM");
     }
+
+    var test2 = function () {
+      var i;
+      var n;
+      var r, r2;
+      var m;
+      for (i = 0; i < 1000; i++) {
+        n = randomInt(1, 5000);
+        r = intToRoman(n);
+        r2 = intToRoman2(n);
+        m = romanToInt(r);
+        console.log(n, "->", r, r2, "->", m);
+        expect(r).toEqual(r2);
+        expect(n).toEqual(m);
+      }
+    };
+
+    test2();
   });
 });

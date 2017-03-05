@@ -51,22 +51,31 @@ describe("js scope", function () {
   });
 
   it("associative array", function () {
-    var map = {};
-    for (var i = 0; i < 10; i++) {
-      map[i] = i * 2;
+    {
+      var map = {};
+      for (var i = 0; i < 10; i++) {
+        map[i] = i * 2;
+      }
+      map[11] = 22;
+      console.log(map);
+      expect(10 in map).toBe(false);
+      expect(11 in map).toBe(true);
+      expect(0 in map).toBe(true);
+      expect(map["0"]).toEqual(0);
+      expect(map.hasOwnProperty(0)).toEqual(true);
+      delete map["0"];
+      console.log(map);
+      expect(0 in map).toBe(false);
+      expect(map["0"]).toEqual(undefined);
+      expect(map.hasOwnProperty(0)).toEqual(false);
     }
-    map[11] = 22;
-    console.log(map);
-    expect(10 in map).toBe(false);
-    expect(11 in map).toBe(true);
-    expect(0 in map).toBe(true);
-    expect(map["0"]).toEqual(0);
-    expect(map.hasOwnProperty(0)).toEqual(true);
-    delete map["0"];
-    console.log(map);
-    expect(0 in map).toBe(false);
-    expect(map["0"]).toEqual(undefined);
-    expect(map.hasOwnProperty(0)).toEqual(false);
+    {
+      var map = { a: 1, b: 2, c: 3, d: 10 };
+      console.log(map);
+      expect(map.a).toBeLessThan(map.b);
+      expect(map.b).toBeLessThan(map.d);
+      expect(map.c + map.d).toEqual(13);
+    }
   });
 
   it("string charAt", function () {
