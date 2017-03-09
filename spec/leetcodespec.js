@@ -30,8 +30,7 @@ describe("leetcode", function () {
     return randomArrayOfLength(length);
   };
 
-  var randomStringOfLength = function (length) {
-    var alphabet = "abcdefghijklmnopqrstuvwxyz";
+  var randomStringOfLengthAndAlphabet = function (length, alphabet) {
     var s = "";
     var i = 0;
     var index = 0;
@@ -40,6 +39,11 @@ describe("leetcode", function () {
       s += alphabet.charAt(index);
     }
     return s;
+  };
+
+  var randomStringOfLength = function (length) {
+    var alphabet = "abcdefghijklmnopqrstuvwxyz";
+    return randomStringOfLengthAndAlphabet(length, alphabet);
   };
 
   var randomString = function () {
@@ -2139,6 +2143,97 @@ describe("leetcode", function () {
         console.log(n, "->", r, r2, "->", m);
         expect(r).toEqual(r2);
         expect(n).toEqual(m);
+      }
+    };
+
+    test2();
+  });
+
+  it("Longest Common Prefix", function () {
+    var longestCommonPrefix = function (strs) {
+      var p = "";
+      if (!strs || strs.length == 0) return p;
+      var i = 0;
+      var j;
+      var stop = false;
+      var c;
+      while (true) {
+        if (!strs[0] || i == strs[0].length) break;
+        c = strs[0].charAt(i);
+        for (j = 1; j < strs.length; j++) {
+          if (!strs[j]
+            || i == strs[j].length
+            || strs[j].charAt(i) != c) {
+            stop = true;
+            break;
+          }
+        }
+        if (stop) break;
+        else p += c;
+        i++;
+      }
+      return p;
+    };
+
+    var longestCommonPrefix2 = function (strs) {
+      var prefix = function (l, r) {
+        if (l >= r) return strs[r];
+        var m = l + Math.floor((r - l) / 2);
+        var pl = prefix(l, m);
+        var pr = prefix(m + 1, r);
+        var i = 0;
+        var p = ""
+        if (pl && pr) {
+          while (i < pl.length && i < pr.length) {
+            if (pl[i] != pr[i]) break;
+            p += pl[i];
+            i++;
+          }
+        }
+        return p;
+      };
+
+      if (!strs || strs.length == 0) return "";
+      return prefix(0, strs.length - 1);
+    };
+
+    var test = function (strs, ans) {
+      var p = longestCommonPrefix(strs);
+      var p2 = longestCommonPrefix2(strs);
+      expect(p).toEqual(ans);
+      expect(p2).toEqual(ans);
+    };
+
+    {
+      test([], "");
+      test([""], "");
+      test(["", ""], "");
+      test(["", "", ""], "");
+      test(["", "a"], "");
+      test(["a", ""], "");
+      test(["", "a", ""], "");
+      test(["a", "a", "b", ""], "");
+      test(["a"], "a");
+      test(["a", "a"], "a");
+      test(["a", "b"], "");
+      test(["a", "a", "a"], "a");
+      test(["a", "ab"], "a");
+      test(["ab", "a"], "a");
+      test(["abc", "abd"], "ab");
+    }
+
+    var test2 = function () {
+      for (var i = 0; i < 100; i++) {
+        var length = randomInt(1, 6);
+        var strs = [];
+        for (var j = 0; j < length; j++) {
+          var s = randomStringOfLengthAndAlphabet(5, "ab");
+          strs.push(s);
+        }
+        var p = longestCommonPrefix(strs);
+        var p2 = longestCommonPrefix2(strs);
+        console.log(strs, p, p2);
+        expect(p).toEqual(p2);
       }
     };
 
