@@ -134,15 +134,48 @@ describe("js scope", function () {
   });
 
   it("sorts array by string values", function () {
-    var a = [1, 2, 10];
-    a.sort();
-    expect(a[0]).toEqual(1);
-    expect(a[1]).toEqual(10);
-    expect(a[2]).toEqual(2);
-    a.sort(function (x, y) { return x - y; });
-    expect(a[0]).toEqual(1);
-    expect(a[1]).toEqual(2);
-    expect(a[2]).toEqual(10);
+    {
+      var a = [1, 2, 10];
+      a.sort();
+      expect(a[0]).toEqual(1);
+      expect(a[1]).toEqual(10);
+      expect(a[2]).toEqual(2);
+      a.sort(function (x, y) { return x - y; });
+      expect(a[0]).toEqual(1);
+      expect(a[1]).toEqual(2);
+      expect(a[2]).toEqual(10);
+    }
+    {
+      a = [1, 0, -1];
+      a.sort();
+      expect(a[0]).toEqual(-1);
+      expect(a[1]).toEqual(0);
+      expect(a[2]).toEqual(1);
+      a = [2, -1, -1];
+      a.sort();
+      expect(a[0]).toEqual(-1);
+      expect(a[1]).toEqual(-1);
+      expect(a[2]).toEqual(2);
+      a = [-4, -1, -2];
+      a.sort();
+      expect(a[0]).toEqual(-1);
+      expect(a[1]).toEqual(-2);
+      expect(a[2]).toEqual(-4);
+    }
+    {
+      a = [[-1, 0, 1], [-1, -1, 2]];
+      a.sort();
+      expect(a[0]).toEqual([-1, -1, 2]);
+      expect(a[1]).toEqual([-1, 0, 1]);
+      a = [[1, 0, -1], [2, -1, -1]];
+      a.sort();
+      expect(a[0]).toEqual([1, 0, -1]);
+      expect(a[1]).toEqual([2, -1, -1]);
+      a = [[2, 1], [1, 2, 1]];
+      a.sort();
+      expect(a[0]).toEqual([1, 2, 1]);
+      expect(a[1]).toEqual([2, 1]);
+    }
   });
 
   it("function parameter", function () {

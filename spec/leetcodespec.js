@@ -6,7 +6,8 @@ describe("leetcode", function () {
     var v;
     for (i = 0; i < length; i++) {
       v = min + Math.floor(Math.random() * (max - min));
-      a.push(v);
+      if (Math.abs(v) == 0) a.push(0);
+      else a.push(v);
     }
     return a;
   };
@@ -74,17 +75,172 @@ describe("leetcode", function () {
       return result;
     };
 
+    var twoSum2 = function (nums, target) {
+      var result = [];
+      var i;
+      var index = [];
+      for (i = 0; i < nums.length; i++) {
+        index.push(i);
+      }
+      index.sort(function (x, y) { return nums[x] - nums[y]; });
+      i = 0;
+      var j = nums.length - 1;
+      var s;
+      while (i < j) {
+        s = nums[index[i]] + nums[index[j]];
+        if (s == target) {
+          result.push(index[i], index[j]);
+          break;
+        } else if (s < target) {
+          while (i + 1 < j && nums[index[i]] == nums[index[i + 1]]) i++;
+          i++;
+        } else {
+          while (i < j - 1 && nums[index[j - 1]] == nums[index[j]]) j--;
+          j--;
+        }
+      }
+      return result;
+    };
+
     var test = function (nums, target, answer) {
       var result = twoSum(nums, target);
+      var result2 = twoSum2(nums, target);
       expect(result.length).toEqual(2);
       expect(result[0]).toEqual(answer[0]);
       expect(result[1]).toEqual(answer[1]);
+      expect(result2.length).toEqual(2);
+      expect(result2[0]).toEqual(answer[0]);
+      expect(result2[1]).toEqual(answer[1]);
     };
 
     test([1, 1], 2, [0, 1]);
     test([1, 2, 3], 3, [0, 1]);
     test([1, 2, 3], 4, [0, 2]);
     test([1, 2, 3], 5, [1, 2]);
+  });
+
+  it("3Sum", function () {
+    var threeSum = function (nums) {
+      var ans = [];
+      if (!nums || nums.length < 3) return ans;
+      nums.sort(function (x, y) { return x - y; });
+      var i, j;
+      var twoSum;
+      var map;
+      var n;
+      var t;
+      for (i = 0; i < nums.length - 2; i++) {
+        if (nums[i] > 0) break;
+        if (i > 0 && nums[i - 1] == nums[i]) continue;
+        map = {};
+        twoSum = -nums[i];
+        for (j = i + 1; j < nums.length; j++) {
+          n = twoSum - nums[j];
+          if (map.hasOwnProperty(n)) {
+            if (n == nums[j]) {
+              if (map[n].length < 2) {
+                t = [nums[i], n, nums[j]];
+                ans.push(t);
+                map[n].push(j);
+              }
+            } else {
+              if (!map.hasOwnProperty(nums[j])) {
+                t = [nums[i], n, nums[j]];
+                ans.push(t);
+                map[nums[j]] = [];
+                map[nums[j]].push(j);
+              }
+            }
+          } else {
+            if (!map.hasOwnProperty(nums[j])) {
+              map[nums[j]] = [];
+              map[nums[j]].push(j);
+            }
+          }
+        }
+      }
+      return ans;
+    };
+
+    var threeSum2 = function (nums) {
+      var ans = [];
+      if (!nums || nums.length < 3) return ans;
+      nums.sort(function (x, y) { return x - y; });
+      var i, j, k;
+      var twoSum;
+      var t;
+      for (i = 0; i < nums.length - 2; i++) {
+        if (nums[i] > 0) break;
+        if (i > 0 && nums[i - 1] == nums[i]) continue;
+        twoSum = -nums[i];
+        j = i + 1;
+        k = nums.length - 1;
+        while (j < k) {
+          if (nums[j] + nums[k] == twoSum) {
+            t = [nums[i], nums[j], nums[k]];
+            ans.push(t);
+            while (j + 1 < k && nums[j] == nums[j + 1]) j++;
+            j++;
+            while (j < k - 1 && nums[k - 1] == nums[k]) k--;
+            k--;
+          } else if (nums[j] + nums[k] < twoSum) {
+            j++;
+          } else {
+            k--;
+          }
+        }
+      }
+      return ans;
+    };
+
+    var sort2DArray = function (a) {
+      var i;
+      for (i = 0; i < a.length; i++) {
+        a[i].sort();
+      }
+      a.sort();
+    };
+
+    var verify2DArray = function (actual, expected) {
+      expect(actual.length).toEqual(expected.length);
+      var i, j;
+      for (i = 0; i < actual.length; i++) {
+        expect(actual[i].length).toEqual(expected[i].length);
+        for (j = 0; j < actual[i].length; j++) {
+          if (Math.abs(actual[i][j]) == 0) {
+            expect(Math.abs(expected[i][j])).toEqual(0);
+          } else {
+            expect(actual[i][j]).toEqual(expected[i][j]);
+          }
+        }
+      }
+    };
+
+    var test = function (nums, ans) {
+      var s = threeSum(nums);
+      var s2 = threeSum2(nums);
+      sort2DArray(ans);
+      sort2DArray(s);
+      sort2DArray(s2);
+      verify2DArray(s, ans);
+      verify2DArray(s2, ans);
+    };
+
+    test([-1, 0, 1, 2, -1, -4], [[-1, 0, 1], [-1, -1, 2]]);
+
+    var test2 = function () {
+      var i;
+      for (i = 0; i < 200; i++) {
+        var nums = randomArrayOfMinMax(-50, 50);
+        var s = threeSum(nums);
+        var s2 = threeSum2(nums);
+        sort2DArray(s);
+        sort2DArray(s2);
+        verify2DArray(s, s2);
+      }
+    };
+
+    test2();
   });
 
   it("Add Two Numbers", function () {
