@@ -243,6 +243,89 @@ describe("leetcode", function () {
     test2();
   });
 
+  it("3Sum Closest", function () {
+    var threeSumClosest = function (nums, target) {
+      var d = Number.MAX_VALUE;
+      var closest;
+      var i, j, k;
+      var s;
+      for (i = 0; i < nums.length - 2; i++) {
+        for (j = i + 1; j < nums.length - 1; j++) {
+          for (k = j + 1; k < nums.length; k++) {
+            s = nums[i] + nums[j] + nums[k];
+            if (Math.abs(s - target) < d) {
+              d = Math.abs(s - target);
+              closest = s;
+            }
+          }
+        }
+      }
+      return closest;
+    };
+
+    var threeSumClosest2 = function (nums, target) {
+      if (nums.length <= 3) {
+        return nums.reduce(function (acc, val) { return acc + val; }, 0);
+      }
+      nums.sort(function (x, y) { return x - y; });
+      var d = Number.MAX_VALUE;
+      var closest;
+      var i, j, k;
+      var s;
+      for (i = 0; i < nums.length - 2; i++) {
+        j = i + 1;
+        k = nums.length - 1;
+        while (j < k) {
+          s = nums[i] + nums[j] + nums[k];
+          if (Math.abs(s - target) < d) {
+            d = Math.abs(s - target);
+            closest = s;
+          }
+          if (s == target) {
+            break;
+          } else if (s < target) {
+            while (j + 1 < k && nums[j] == nums[j + 1]) j++;
+            j++;
+          } else {
+            while (j < k - 1 && nums[k - 1] == nums[k]) k--;
+            k--;
+          }
+        }
+      }
+      return closest;
+    };
+
+    var test = function (nums, target, ans) {
+      var s = threeSumClosest(nums, target);
+      var s2 = threeSumClosest2(nums, target);
+      if (s == s2) {
+        expect(s).toEqual(ans);
+        expect(s2).toEqual(ans);
+      } else {
+        expect(Math.abs(s - ans)).toEqual(Math.abs(s2 - ans));
+      }
+    };
+
+    test([-1, 2, 1, -4], 1, 2);
+    test([-10, -8, -5, -2, -1, 4, 5, 8], -6, -6);
+
+    var test2 = function () {
+      var i;
+      for (i = 0; i < 1000; i++) {
+        var nums = randomArrayOfLengthMinMax(randomInt(3, 100), -100, 100);
+        var target = randomInt(-101, 101);
+        var s = threeSumClosest(nums, target);
+        var s2 = threeSumClosest2(nums, target);
+        if (s != s2) {
+          console.log(i, nums, target, s, s2);
+          expect(Math.abs(s - target)).toEqual(Math.abs(s2 - target));
+        }
+      }
+    };
+
+    test2();
+  });
+
   it("Add Two Numbers", function () {
     function ListNode(val) {
       this.val = val;
