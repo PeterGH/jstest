@@ -56,6 +56,29 @@ describe("leetcode", function () {
     return Math.floor(min + Math.random() * (max - min));
   };
 
+  var sort2DArray = function (a) {
+    var i;
+    for (i = 0; i < a.length; i++) {
+      a[i].sort();
+    }
+    a.sort();
+  };
+
+  var verify2DArray = function (actual, expected) {
+    expect(actual.length).toEqual(expected.length);
+    var i, j;
+    for (i = 0; i < actual.length; i++) {
+      expect(actual[i].length).toEqual(expected[i].length);
+      for (j = 0; j < actual[i].length; j++) {
+        if (Math.abs(actual[i][j]) == 0) {
+          expect(Math.abs(expected[i][j])).toEqual(0);
+        } else {
+          expect(actual[i][j]).toEqual(expected[i][j]);
+        }
+      }
+    }
+  };
+
   it("Two Sum", function () {
     var twoSum = function (nums, target) {
       var result = [];
@@ -193,29 +216,6 @@ describe("leetcode", function () {
       return ans;
     };
 
-    var sort2DArray = function (a) {
-      var i;
-      for (i = 0; i < a.length; i++) {
-        a[i].sort();
-      }
-      a.sort();
-    };
-
-    var verify2DArray = function (actual, expected) {
-      expect(actual.length).toEqual(expected.length);
-      var i, j;
-      for (i = 0; i < actual.length; i++) {
-        expect(actual[i].length).toEqual(expected[i].length);
-        for (j = 0; j < actual[i].length; j++) {
-          if (Math.abs(actual[i][j]) == 0) {
-            expect(Math.abs(expected[i][j])).toEqual(0);
-          } else {
-            expect(actual[i][j]).toEqual(expected[i][j]);
-          }
-        }
-      }
-    };
-
     var test = function (nums, ans) {
       var s = threeSum(nums);
       var s2 = threeSum2(nums);
@@ -324,6 +324,65 @@ describe("leetcode", function () {
     };
 
     test2();
+  });
+
+  it("4Sum", function () {
+    var fourSum = function (nums, target) {
+      var ans = [];
+      if (!nums || nums.length < 4) return ans;
+      nums.sort(function (x, y) { return x - y; });
+      var i, j, k, l;
+      i = 0;
+      while (i < nums.length - 3) {
+        j = i + 1;
+        while (j < nums.length - 2) {
+          k = j + 1;
+          l = nums.length - 1;
+          while (k < l) {
+            var s = nums[i] + nums[j] + nums[k] + nums[l];
+            if (s == target) {
+              ans.push([nums[i], nums[j], nums[k], nums[l]]);
+              while (k < l && nums[k] == nums[k + 1]) k++;
+              if (k < l) k++;
+              while (k < l && nums[l - 1] == nums[l]) l--;
+              if (k < l) l--;
+            } else if (s < target) {
+              while (k < l && nums[k] == nums[k + 1]) k++;
+              if (k < l) k++;
+            } else {
+              while (k < l && nums[l - 1] == nums[l]) l--;
+              if (k < l) l--;
+            }
+          }
+          while (j < nums.length - 2 && nums[j] == nums[j + 1]) j++;
+          if (j < nums.length - 2) j++;
+        }
+        while (i < nums.length - 3 && nums[i] == nums[i + 1]) i++;
+        if (i < nums.length - 3) i++;
+      }
+      return ans;
+    };
+
+    var test = function (nums, target, ans) {
+      var r = fourSum(nums, target);
+      sort2DArray(r);
+      sort2DArray(ans);
+      verify2DArray(r, ans);
+    };
+
+    test(
+      [1, 0, -1, 0, -2, 2],
+      0,
+      [
+        [-1, 0, 0, 1],
+        [-2, -1, 1, 2],
+        [-2, 0, 0, 2]
+      ]);
+
+    test(
+      [0, 0, 4, -2, -3, -2, -2, -3],
+      -1,
+      [[-3, -2, 0, 4]]);
   });
 
   it("Add Two Numbers", function () {
@@ -2480,7 +2539,7 @@ describe("leetcode", function () {
   });
 
   it("Letter Combinations of a Phone Number", function () {
-    var letterCombinations = function(digits) {
+    var letterCombinations = function (digits) {
       var map = {
         2: ['a', 'b', 'c'],
         3: ['d', 'e', 'f'],
@@ -2493,7 +2552,7 @@ describe("leetcode", function () {
       };
       var result = [];
       if (!digits || digits.length == 0) return result;
-      var gen = function(str, index) {
+      var gen = function (str, index) {
         if (index == digits.length) {
           result.push(str);
           return;
@@ -2511,7 +2570,7 @@ describe("leetcode", function () {
       return result;
     };
 
-    var test = function(digits, ans) {
+    var test = function (digits, ans) {
       var result = letterCombinations(digits);
       result.sort();
       ans.sort();
