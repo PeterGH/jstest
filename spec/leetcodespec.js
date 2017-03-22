@@ -56,6 +56,18 @@ describe("leetcode", function () {
     return Math.floor(min + Math.random() * (max - min));
   };
 
+  var verifyArray = function (actual, expected) {
+    expect(actual.length).toEqual(expected.length);
+    var i;
+    for (i = 0; i < actual.length; i++) {
+      if (Math.abs(actual[i]) == 0) {
+        expect(Math.abs(expected[i])).toEqual(0);
+      } else {
+        expect(actual[i]).toEqual(expected[i]);
+      }
+    }
+  };
+
   var sort2DArray = function (a) {
     var i;
     for (i = 0; i < a.length; i++) {
@@ -652,6 +664,82 @@ describe("leetcode", function () {
     for (var i = 0; i < 100; i++) {
       testRandom();
     }
+  });
+
+  it("Remove Nth Node From End of List", function () {
+    function ListNode(val) {
+      this.val = val;
+      this.next = null;
+    }
+
+    var removeNthFromEnd = function (head, n) {
+      if (!head) return head;
+      var q = head;
+      var i = 0;
+      while (q != null && i < n) {
+        q = q.next;
+        i++;
+      }
+      if (i < n) {
+        // list has less than n nodes
+        return head;
+      }
+      // now q is at index n
+      if (q == null) {
+        // head is the n-th node from the end
+        head = head.next;
+        return head;
+      }
+      q = q.next;
+      var p = head;
+      while (q != null) {
+        p = p.next;
+        q = q.next;
+      }
+      p.next = p.next.next;
+      return head;
+    };
+
+    var arrayToList = function (a) {
+      var l = null;
+      var c = null;
+      var i;
+      var n;
+      for (i = 0; i < a.length; i++) {
+        n = new ListNode(a[i]);
+        if (l == null) {
+          l = n;
+          c = n;
+        } else {
+          c.next = n;
+          c = n;
+        }
+      }
+      return l;
+    };
+
+    var listToArray = function (l) {
+      var a = [];
+      while (l != null) {
+        a.push(l.val);
+        l = l.next;
+      }
+      return a;
+    };
+
+    var test = function (a, n, ans) {
+      var l = arrayToList(a);
+      var l2 = removeNthFromEnd(l, n);
+      var a2 = listToArray(l2);
+      a2.sort();
+      ans.sort();
+      verifyArray(a2, ans);
+    };
+
+    test([1, 2, 3, 4, 5], 5, [2, 3, 4, 5]);
+    test([1, 2, 3, 4, 5], 1, [1, 2, 3, 4]);
+    test([1, 2, 3, 4, 5], 2, [1, 2, 3, 5]);
+    test([1, 2, 3, 4, 5], 6, [1, 2, 3, 4, 5]);
   });
 
   it("Longest Substring Without Repeating Characters", function () {
