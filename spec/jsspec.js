@@ -200,5 +200,13 @@ describe("js scope", function () {
     expect(o.x).toEqual(3);
     f2(o);
     expect(o.x).toEqual(4);
+
+    var str = "a";
+    var f3 = function (s) {
+      s += "b";
+      expect(s).toEqual("ab");
+    };
+    f3(str);
+    expect(str).toEqual("a");
   });
 });

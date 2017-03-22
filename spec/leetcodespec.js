@@ -2478,4 +2478,51 @@ describe("leetcode", function () {
 
     test2();
   });
+
+  it("Letter Combinations of a Phone Number", function () {
+    var letterCombinations = function(digits) {
+      var map = {
+        2: ['a', 'b', 'c'],
+        3: ['d', 'e', 'f'],
+        4: ['g', 'h', 'i'],
+        5: ['j', 'k', 'l'],
+        6: ['m', 'n', 'o'],
+        7: ['p', 'q', 'r', 's'],
+        8: ['t', 'u', 'v'],
+        9: ['w', 'x', 'y', 'z']
+      };
+      var result = [];
+      if (!digits || digits.length == 0) return result;
+      var gen = function(str, index) {
+        if (index == digits.length) {
+          result.push(str);
+          return;
+        }
+        var c = digits.charAt(index);
+        if (map.hasOwnProperty(c)) {
+          for (var i = 0; i < map[c].length; i++) {
+            gen(str + map[c][i], index + 1);
+          }
+        } else {
+          gen(str, index + 1);
+        }
+      };
+      gen("", 0);
+      return result;
+    };
+
+    var test = function(digits, ans) {
+      var result = letterCombinations(digits);
+      result.sort();
+      ans.sort();
+      console.log(result);
+      console.log(ans);
+      expect(result.length).toEqual(ans.length);
+      for (var i = 0; i < result.length; i++) {
+        expect(result[i]).toEqual(ans[i]);
+      }
+    };
+
+    test("23", ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]);
+  });
 });
