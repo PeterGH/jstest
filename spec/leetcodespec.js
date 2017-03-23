@@ -91,6 +91,51 @@ describe("leetcode", function () {
     }
   };
 
+  var permuteString = function (str) {
+    var result = [];
+    if (!str) return result;
+    var permute = function (prefix, cur) {
+      if (!cur) {
+        result.push(prefix);
+        return;
+      }
+      var c;
+      var i;
+      var s = "";
+      for (i = 0; i < cur.length; i++) {
+        c = cur.charAt(i);
+        if (i > 0) s = cur.substring(0, i);
+        if (i < cur.length - 1) s += cur.substring(i + 1, cur.length);
+        permute(prefix + c, s);
+      }
+    };
+    permute("", str);
+    return result;
+  };
+
+  it("Permute String", function () {
+    var test = function (str) {
+      var res = permuteString(str);
+      var count = 1;
+      for (var i = 1; i <= str.length; i++) {
+        count *= i;
+      }
+      expect(res.length).toEqual(str.length > 0 ? count : 0);
+      for (var i = 0; i < res.length; i++) {
+        expect(res[i].length).toEqual(str.length);
+        for (var j = i + 1; j < res.length; j++) {
+          expect(res[i].localeCompare(res[j])).not.toEqual(0);
+        }
+      }
+    };
+
+    test("");
+    test("a");
+    test("ab");
+    test("abc");
+    test("abcd");
+  });
+
   it("Two Sum", function () {
     var twoSum = function (nums, target) {
       var result = [];
@@ -2671,5 +2716,113 @@ describe("leetcode", function () {
     };
 
     test("23", ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]);
+  });
+
+  it("Valid Parentheses", function () {
+    var isValid = function (s) {
+      if (!s) return true;
+      var left = [];
+      var i;
+      var c;
+      var map = {
+        ')': '(',
+        '}': '{',
+        ']': '['
+      };
+      for (i = 0; i < s.length; i++) {
+        c = s.charAt(i);
+        switch (c) {
+          case '(':
+          case '{':
+          case '[':
+            left.push(c);
+            break;
+          case ')':
+          case '}':
+          case ']':
+            if (left.length == 0) return false;
+            if (left[left.length - 1] != map[c]) return false;
+            left.pop();
+            break;
+        }
+      }
+      return left.length == 0;
+    };
+
+    var isValid2 = function (s) {
+      if (!s) return true;
+      var i = -1
+      var j, k;
+      var c;
+      var map = {
+        ')': '(',
+        '}': '{',
+        ']': '['
+      };
+      for (j = 0; j < s.length; j++) {
+        c = s.charAt(j);
+        switch (c) {
+          case '(':
+          case '{':
+          case '[':
+            i = j;
+            break;
+          case ')':
+          case '}':
+          case ']':
+            if (i < 0) return false;
+            if (s.charAt(i) != map[c]) return false;
+            i--;
+            while (i >= 0) {
+              k = 0;
+              while (i >= 0
+                && (s.charAt(i) == ')' || s.charAt(i) == '}' || s.charAt(i) == ']')) {
+                k++;
+                i--;
+              }
+              if (k == 0) break;
+              i -= k;
+            }
+            break;
+        }
+      }
+      return i < 0;
+    };
+
+    var test = function (s, ans) {
+      var v = isValid(s);
+      var v2 = isValid2(s);
+      expect(v).toEqual(ans);
+      expect(v2).toEqual(ans);
+    };
+
+    test("[]", true);
+    test("[[]", false);
+    test("[]]", false);
+    test('(]', false);
+
+    var test2 = function () {
+      var i;
+      for (i = 0; i < 1000; i++) {
+        var len = randomInt(0, 10);
+        var s = randomStringOfLengthAndAlphabet(len, "(){}[]");
+        var v = isValid(s);
+        var v2 = isValid2(s);
+        expect(v).toEqual(v2);
+      }
+    };
+
+    test2();
+
+    var test3 = function (s) {
+      var p = permuteString(s);
+      for (var i = 0; i < p.length; i++) {
+        var v = isValid(p[i]);
+        var v2 = isValid2(p[i]);
+        expect(v).toEqual(v2);
+      }
+    };
+
+    test3("(){}[]");
   });
 });

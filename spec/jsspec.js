@@ -208,5 +208,13 @@ describe("js scope", function () {
     };
     f3(str);
     expect(str).toEqual("a");
+
+    var arr = ['a', 'b', 'c'];
+    var f4 = function (a) {
+      a[1] = 'd';
+    };
+    expect(arr[1]).toEqual('b');
+    f4(arr);
+    expect(arr[1]).toEqual('d');
   });
 });
