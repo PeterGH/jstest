@@ -442,349 +442,382 @@ describe("leetcode", function () {
       [[-3, -2, 0, 4]]);
   });
 
-  it("Add Two Numbers", function () {
+  describe("Link List", function () {
     function ListNode(val) {
       this.val = val;
       this.next = null;
     }
 
-    // List head is the least significant digit
-    // Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
-    // Output: 7 -> 0 -> 8
-    var addTwoNumbers = function (l1, l2) {
-      var carry = 0;
-      var list = null; // The head of the result list
-      var current = null; // The current node of the result list
-      var sum;
-      while (l1 != null || l2 != null || carry != 0) {
-        sum = carry;
-        if (l1 != null) {
-          sum += l1.val;
+    var arrayToList = function (a) {
+      var l = null;
+      var c = null;
+      var i;
+      var n;
+      for (i = 0; i < a.length; i++) {
+        n = new ListNode(a[i]);
+        if (l == null) {
+          l = n;
+          c = n;
+        } else {
+          c.next = n;
+          c = n;
+        }
+      }
+      return l;
+    };
+
+    var listToArray = function (l) {
+      var a = [];
+      while (l != null) {
+        a.push(l.val);
+        l = l.next;
+      }
+      return a;
+    };
+
+    it("Add Two Numbers", function () {
+      // List head is the least significant digit
+      // Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+      // Output: 7 -> 0 -> 8
+      var addTwoNumbers = function (l1, l2) {
+        var carry = 0;
+        var list = null; // The head of the result list
+        var current = null; // The current node of the result list
+        var sum;
+        while (l1 != null || l2 != null || carry != 0) {
+          sum = carry;
+          if (l1 != null) {
+            sum += l1.val;
+            l1 = l1.next;
+          }
+          if (l2 != null) {
+            sum += l2.val;
+            l2 = l2.next;
+          }
+          if (sum >= 10) {
+            carry = 1;
+            sum -= 10;
+          } else {
+            carry = 0;
+          }
+          var n = new ListNode(sum);
+          if (list == null) {
+            list = n;
+            current = n;
+          } else {
+            current.next = n;
+            current = n;
+          }
+        }
+        return list;
+      };
+
+      // What if the the digits in the linked list are stored in non-reversed order?
+      // The list head is the most significant digit. For example:
+      // (3 -> 4 -> 2) + (4 -> 6 -> 5) = 8 -> 0 -> 7
+      var addTwoNumbers2 = function (l1, l2) {
+        var addTwoNumbersSameLength = function (ls1, ls2, ls) {
+          if (ls1 == null && ls2 == null) {
+            return 0;
+          }
+          var n = new ListNode(0);
+          var c = addTwoNumbersSameLength(ls1.next, ls2.next, n);
+          var s = c;
+          s += ls1.val;
+          s += ls2.val;
+          if (s >= 10) {
+            c = 1;
+            s -= 10;
+          } else {
+            c = 0;
+          }
+          n.val = s;
+          ls.next = n;
+          return c;
+        };
+
+        if (l1 == null && l2 == null) return null;
+
+        var s1 = l1;
+        var s2 = l2;
+        while (s1 != null && s2 != null) {
+          s1 = s1.next;
+          s2 = s2.next;
+        }
+
+        var a;
+        var b1, b2;
+        var s;
+        if (s1 == null) {
+          a = l2
+          b1 = l2;
+          s = s2;
+          b2 = l1;
+        } else if (s2 == null) {
+          a = l1;
+          b1 = l1;
+          s = s1;
+          b2 = l2;
+        }
+
+        while (s != null) {
+          s = s.next;
+          b1 = b1.next;
+        }
+
+        // (1) a -> ... -> b1 == null
+        //                 b2 == null
+        // (2) a -> ... -> b1 -> ... -> null
+        //                 b2 -> ... -> null
+        // (3) a = b1 -> ... -> null
+        //         b2 -> ... -> null
+
+        var add = function (la, ln) {
+          if (la == b1) {
+            return addTwoNumbersSameLength(b1, b2, ln);
+          }
+          var n = new ListNode(0);
+          var c = add(la.next, n);
+          var s = c;
+          s += la.val;
+          if (s >= 10) {
+            s -= 10;
+            c = 1;
+          } else {
+            c = 0;
+          }
+          n.val = s;
+          ln.next = n;
+          return c;
+        };
+
+        var list = new ListNode(0);
+        var c = add(a, list);
+        if (c > 0) list.val = c;
+        else list = list.next;
+        return list;
+      };
+
+      // What if the the digits in the linked list are stored in non-reversed order?
+      // The list head is the most significant digit. For example:
+      // (3 -> 4 -> 2) + (4 -> 6 -> 5) = 8 -> 0 -> 7
+      var addTwoNumbers3 = function (l1, l2) {
+        if (l1 == null && l2 == null) return null;
+        var a1 = [];
+        var a2 = [];
+        while (l1 != null) {
+          a1.push(l1.val);
           l1 = l1.next;
         }
-        if (l2 != null) {
-          sum += l2.val;
+        while (l2 != null) {
+          a2.push(l2.val);
           l2 = l2.next;
         }
-        if (sum >= 10) {
-          carry = 1;
-          sum -= 10;
-        } else {
-          carry = 0;
-        }
-        var n = new ListNode(sum);
-        if (list == null) {
+        var list = null;
+        var carry = 0;
+        var sum = 0;
+        while (a1.length > 0 || a2.length > 0 || carry > 0) {
+          sum = carry;
+          if (a1.length > 0) sum += a1.pop();
+          if (a2.length > 0) sum += a2.pop();
+          if (sum >= 10) {
+            sum -= 10;
+            carry = 1;
+          } else {
+            carry = 0;
+          }
+          var n = new ListNode(sum);
+          if (list != null) n.next = list;
           list = n;
-          current = n;
-        } else {
-          current.next = n;
-          current = n;
         }
-      }
-      return list;
-    };
 
-    // What if the the digits in the linked list are stored in non-reversed order?
-    // The list head is the most significant digit. For example:
-    // (3 -> 4 -> 2) + (4 -> 6 -> 5) = 8 -> 0 -> 7
-    var addTwoNumbers2 = function (l1, l2) {
-      var addTwoNumbersSameLength = function (ls1, ls2, ls) {
-        if (ls1 == null && ls2 == null) {
-          return 0;
-        }
-        var n = new ListNode(0);
-        var c = addTwoNumbersSameLength(ls1.next, ls2.next, n);
-        var s = c;
-        s += ls1.val;
-        s += ls2.val;
-        if (s >= 10) {
-          c = 1;
-          s -= 10;
-        } else {
-          c = 0;
-        }
-        n.val = s;
-        ls.next = n;
-        return c;
+        return list;
       };
 
-      if (l1 == null && l2 == null) return null;
-
-      var s1 = l1;
-      var s2 = l2;
-      while (s1 != null && s2 != null) {
-        s1 = s1.next;
-        s2 = s2.next;
-      }
-
-      var a;
-      var b1, b2;
-      var s;
-      if (s1 == null) {
-        a = l2
-        b1 = l2;
-        s = s2;
-        b2 = l1;
-      } else if (s2 == null) {
-        a = l1;
-        b1 = l1;
-        s = s1;
-        b2 = l2;
-      }
-
-      while (s != null) {
-        s = s.next;
-        b1 = b1.next;
-      }
-
-      // (1) a -> ... -> b1 == null
-      //                 b2 == null
-      // (2) a -> ... -> b1 -> ... -> null
-      //                 b2 -> ... -> null
-      // (3) a = b1 -> ... -> null
-      //         b2 -> ... -> null
-
-      var add = function (la, ln) {
-        if (la == b1) {
-          return addTwoNumbersSameLength(b1, b2, ln);
+      var test = function (a1, a2, answer) {
+        var l1 = arrayToList(a1);
+        var l2 = arrayToList(a2);
+        var l = addTwoNumbers(l1, l2);
+        var a = listToArray(l);
+        expect(a.length).toEqual(answer.length);
+        var i;
+        for (i = 0; i < a.length; i++) {
+          expect(a[i]).toEqual(answer[i]);
         }
-        var n = new ListNode(0);
-        var c = add(la.next, n);
-        var s = c;
-        s += la.val;
-        if (s >= 10) {
-          s -= 10;
-          c = 1;
-        } else {
-          c = 0;
+
+        var lr1 = arrayToList(a1.reverse());
+        var lr2 = arrayToList(a2.reverse());
+        var lr = addTwoNumbers2(lr1, lr2);
+        var ar = listToArray(lr);
+        ar.reverse();
+        expect(ar.length).toEqual(answer.length);
+        for (i = 0; i < ar.length; i++) {
+          expect(ar[i]).toEqual(answer[i]);
         }
-        n.val = s;
-        ln.next = n;
-        return c;
+
+        var lr21 = arrayToList(a1);
+        var lr22 = arrayToList(a2);
+        var lr2 = addTwoNumbers3(lr21, lr22);
+        var ar2 = listToArray(lr2);
+        ar2.reverse();
+        expect(ar2.length).toEqual(answer.length);
+        for (i = 0; i < ar2.length; i++) {
+          expect(ar2[i]).toEqual(answer[i]);
+        }
       };
 
-      var list = new ListNode(0);
-      var c = add(a, list);
-      if (c > 0) list.val = c;
-      else list = list.next;
-      return list;
-    };
+      test([2, 4, 3], [5, 6, 4], [7, 0, 8]);
+      test([], [], []);
+      test([], [1], [1]);
+      test([1], [], [1]);
+      test([5, 5, 5], [5], [0, 6, 5]);
+      test([5], [5], [0, 1]);
+      test([9, 9], [1], [0, 0, 1]);
 
-    // What if the the digits in the linked list are stored in non-reversed order?
-    // The list head is the most significant digit. For example:
-    // (3 -> 4 -> 2) + (4 -> 6 -> 5) = 8 -> 0 -> 7
-    var addTwoNumbers3 = function (l1, l2) {
-      if (l1 == null && l2 == null) return null;
-      var a1 = [];
-      var a2 = [];
-      while (l1 != null) {
-        a1.push(l1.val);
-        l1 = l1.next;
-      }
-      while (l2 != null) {
-        a2.push(l2.val);
-        l2 = l2.next;
-      }
-      var list = null;
-      var carry = 0;
-      var sum = 0;
-      while (a1.length > 0 || a2.length > 0 || carry > 0) {
-        sum = carry;
-        if (a1.length > 0) sum += a1.pop();
-        if (a2.length > 0) sum += a2.pop();
-        if (sum >= 10) {
-          sum -= 10;
-          carry = 1;
-        } else {
-          carry = 0;
+      var testRandom = function () {
+        var a1 = randomArray();
+        var a2 = randomArray();
+
+        var l1 = arrayToList(a1);
+        var l2 = arrayToList(a2);
+        var lr1 = addTwoNumbers(l1, l2);
+        var ar1 = listToArray(lr1);
+
+        a1.reverse();
+        a2.reverse();
+
+        var l11 = arrayToList(a1);
+        var l12 = arrayToList(a2);
+        var lr11 = addTwoNumbers2(l11, l12);
+        var ar11 = listToArray(lr11);
+        ar11.reverse();
+
+        var l21 = arrayToList(a1);
+        var l22 = arrayToList(a2);
+        var lr21 = addTwoNumbers3(l21, l22);
+        var ar21 = listToArray(lr21);
+        ar21.reverse();
+
+        expect(ar1.length).toEqual(ar11.length);
+        expect(ar1.length).toEqual(ar21.length);
+        var i;
+        for (i = 0; i < ar1.length; i++) {
+          expect(ar1[i]).toEqual(ar11[i]);
+          expect(ar1[i]).toEqual(ar21[i]);
         }
-        var n = new ListNode(sum);
-        if (list != null) n.next = list;
-        list = n;
+      };
+
+      for (var i = 0; i < 100; i++) {
+        testRandom();
       }
+    });
 
-      return list;
-    };
-
-    var arrayToList = function (a) {
-      var l = null;
-      var c = null;
-      var i;
-      var n;
-      for (i = 0; i < a.length; i++) {
-        n = new ListNode(a[i]);
-        if (l == null) {
-          l = n;
-          c = n;
-        } else {
-          c.next = n;
-          c = n;
+    it("Remove Nth Node From End of List", function () {
+      var removeNthFromEnd = function (head, n) {
+        if (!head) return head;
+        var q = head;
+        var i = 0;
+        while (q != null && i < n) {
+          q = q.next;
+          i++;
         }
-      }
-      return l;
-    };
-
-    var listToArray = function (l) {
-      var a = [];
-      while (l != null) {
-        a.push(l.val);
-        l = l.next;
-      }
-      return a;
-    };
-
-    var test = function (a1, a2, answer) {
-      var l1 = arrayToList(a1);
-      var l2 = arrayToList(a2);
-      var l = addTwoNumbers(l1, l2);
-      var a = listToArray(l);
-      expect(a.length).toEqual(answer.length);
-      var i;
-      for (i = 0; i < a.length; i++) {
-        expect(a[i]).toEqual(answer[i]);
-      }
-
-      var lr1 = arrayToList(a1.reverse());
-      var lr2 = arrayToList(a2.reverse());
-      var lr = addTwoNumbers2(lr1, lr2);
-      var ar = listToArray(lr);
-      ar.reverse();
-      expect(ar.length).toEqual(answer.length);
-      for (i = 0; i < ar.length; i++) {
-        expect(ar[i]).toEqual(answer[i]);
-      }
-
-      var lr21 = arrayToList(a1);
-      var lr22 = arrayToList(a2);
-      var lr2 = addTwoNumbers3(lr21, lr22);
-      var ar2 = listToArray(lr2);
-      ar2.reverse();
-      expect(ar2.length).toEqual(answer.length);
-      for (i = 0; i < ar2.length; i++) {
-        expect(ar2[i]).toEqual(answer[i]);
-      }
-    };
-
-    test([2, 4, 3], [5, 6, 4], [7, 0, 8]);
-    test([], [], []);
-    test([], [1], [1]);
-    test([1], [], [1]);
-    test([5, 5, 5], [5], [0, 6, 5]);
-    test([5], [5], [0, 1]);
-    test([9, 9], [1], [0, 0, 1]);
-
-    var testRandom = function () {
-      var a1 = randomArray();
-      var a2 = randomArray();
-
-      var l1 = arrayToList(a1);
-      var l2 = arrayToList(a2);
-      var lr1 = addTwoNumbers(l1, l2);
-      var ar1 = listToArray(lr1);
-
-      a1.reverse();
-      a2.reverse();
-
-      var l11 = arrayToList(a1);
-      var l12 = arrayToList(a2);
-      var lr11 = addTwoNumbers2(l11, l12);
-      var ar11 = listToArray(lr11);
-      ar11.reverse();
-
-      var l21 = arrayToList(a1);
-      var l22 = arrayToList(a2);
-      var lr21 = addTwoNumbers3(l21, l22);
-      var ar21 = listToArray(lr21);
-      ar21.reverse();
-
-      expect(ar1.length).toEqual(ar11.length);
-      expect(ar1.length).toEqual(ar21.length);
-      var i;
-      for (i = 0; i < ar1.length; i++) {
-        expect(ar1[i]).toEqual(ar11[i]);
-        expect(ar1[i]).toEqual(ar21[i]);
-      }
-    };
-
-    for (var i = 0; i < 100; i++) {
-      testRandom();
-    }
-  });
-
-  it("Remove Nth Node From End of List", function () {
-    function ListNode(val) {
-      this.val = val;
-      this.next = null;
-    }
-
-    var removeNthFromEnd = function (head, n) {
-      if (!head) return head;
-      var q = head;
-      var i = 0;
-      while (q != null && i < n) {
+        if (i < n) {
+          // list has less than n nodes
+          return head;
+        }
+        // now q is at index n
+        if (q == null) {
+          // head is the n-th node from the end
+          head = head.next;
+          return head;
+        }
         q = q.next;
-        i++;
-      }
-      if (i < n) {
-        // list has less than n nodes
-        return head;
-      }
-      // now q is at index n
-      if (q == null) {
-        // head is the n-th node from the end
-        head = head.next;
-        return head;
-      }
-      q = q.next;
-      var p = head;
-      while (q != null) {
-        p = p.next;
-        q = q.next;
-      }
-      p.next = p.next.next;
-      return head;
-    };
-
-    var arrayToList = function (a) {
-      var l = null;
-      var c = null;
-      var i;
-      var n;
-      for (i = 0; i < a.length; i++) {
-        n = new ListNode(a[i]);
-        if (l == null) {
-          l = n;
-          c = n;
-        } else {
-          c.next = n;
-          c = n;
+        var p = head;
+        while (q != null) {
+          p = p.next;
+          q = q.next;
         }
-      }
-      return l;
-    };
+        p.next = p.next.next;
+        return head;
+      };
 
-    var listToArray = function (l) {
-      var a = [];
-      while (l != null) {
-        a.push(l.val);
-        l = l.next;
-      }
-      return a;
-    };
+      var test = function (a, n, ans) {
+        var l = arrayToList(a);
+        var l2 = removeNthFromEnd(l, n);
+        var a2 = listToArray(l2);
+        a2.sort();
+        ans.sort();
+        verifyArray(a2, ans);
+      };
 
-    var test = function (a, n, ans) {
-      var l = arrayToList(a);
-      var l2 = removeNthFromEnd(l, n);
-      var a2 = listToArray(l2);
-      a2.sort();
-      ans.sort();
-      verifyArray(a2, ans);
-    };
+      test([1, 2, 3, 4, 5], 5, [2, 3, 4, 5]);
+      test([1, 2, 3, 4, 5], 1, [1, 2, 3, 4]);
+      test([1, 2, 3, 4, 5], 2, [1, 2, 3, 5]);
+      test([1, 2, 3, 4, 5], 6, [1, 2, 3, 4, 5]);
+    });
 
-    test([1, 2, 3, 4, 5], 5, [2, 3, 4, 5]);
-    test([1, 2, 3, 4, 5], 1, [1, 2, 3, 4]);
-    test([1, 2, 3, 4, 5], 2, [1, 2, 3, 5]);
-    test([1, 2, 3, 4, 5], 6, [1, 2, 3, 4, 5]);
+    it("Merge Two Sorted Lists", function () {
+      var mergeTwoLists = function (l1, l2) {
+        var l = null;
+        var c;
+        while (l1 != null && l2 != null) {
+          if (l1.val < l2.val) {
+            if (l == null) {
+              l = l1;
+              c = l1;
+            } else {
+              c.next = l1;
+              c = l1;
+            }
+            l1 = l1.next;
+          } else {
+            if (l == null) {
+              l = l2;
+              c = l2;
+            } else {
+              c.next = l2;
+              c = l2;
+            }
+            l2 = l2.next;
+          }
+        }
+        if (l1 == null) {
+          if (l == null) {
+            l = l2;
+          } else {
+            c.next = l2;
+          }
+        } else if (l2 == null) {
+          if (l == null) {
+            l = l1;
+          } else {
+            c.next = l1;
+          }
+        }
+        return l;
+      };
+
+      var test = function () {
+        for (var i = 0; i < 100; i++) {
+          var len1 = randomInt(0, 100);
+          var a1 = randomArrayOfLengthMinMax(len1, 0, 100);
+          a1.sort(function (x, y) { return x - y; });
+          var len2 = randomInt(0, 100);
+          var a2 = randomArrayOfLengthMinMax(len2, 0, 100);
+          a2.sort(function (x, y) { return x - y; });
+          var l1 = arrayToList(a1);
+          var l2 = arrayToList(a2);
+          var l = mergeTwoLists(l1, l2);
+          var a = listToArray(l);
+          expect(a.length).toEqual(a1.length + a2.length);
+          for (var j = 0; j < a.length - 1; j++) {
+            expect(a[j]).not.toBeGreaterThan(a[j + 1]);
+          }
+        }
+      };
+
+      test();
+    });
   });
 
   it("Longest Substring Without Repeating Characters", function () {
