@@ -113,18 +113,46 @@ describe("leetcode", function () {
     return result;
   };
 
+  var permuteStringUnique = function (str) {
+    var result = [];
+    if (!str) return result;
+    var permute = function (prefix, cur) {
+      if (!cur) {
+        result.push(prefix);
+        return;
+      }
+      var c;
+      var s = "";
+      var swapped = {};
+      for (var i = 0; i < cur.length; i++) {
+        c = cur.charAt(i);
+        if (swapped.hasOwnProperty(c)) continue;
+        if (i > 0) s = cur.substring(0, i);
+        if (i < cur.length - 1) s += cur.substring(i + 1, cur.length);
+        permute(prefix + c, s);
+        swapped[c] = 1;
+      }
+    };
+    permute("", str);
+    return result;
+  };
+
   it("Permute String", function () {
     var test = function (str) {
       var res = permuteString(str);
+      var res2 = permuteStringUnique(str);
       var count = 1;
       for (var i = 1; i <= str.length; i++) {
         count *= i;
       }
       expect(res.length).toEqual(str.length > 0 ? count : 0);
+      expect(res2.length).toEqual(str.length > 0 ? count : 0);
       for (var i = 0; i < res.length; i++) {
         expect(res[i].length).toEqual(str.length);
+        expect(res2[i].length).toEqual(str.length);
         for (var j = i + 1; j < res.length; j++) {
           expect(res[i].localeCompare(res[j])).not.toEqual(0);
+          expect(res2[i].localeCompare(res2[j])).not.toEqual(0);
         }
       }
     };
@@ -134,6 +162,30 @@ describe("leetcode", function () {
     test("ab");
     test("abc");
     test("abcd");
+
+    var test2 = function (str) {
+      var res = permuteString(str);
+      var resUnique = [];
+      for (var i = 0; i < res.length; i++) {
+        var unique = true;
+        for (var j = i + 1; j < res.length; j++) {
+          if (res[i].localeCompare(res[j]) == 0) {
+            unique = false;
+            break;
+          }
+        }
+        if (unique) resUnique.push(res[i]);
+      }
+      var res2 = permuteStringUnique(str);
+      expect(resUnique.length).toEqual(res2.length);
+      resUnique.sort();
+      res2.sort();
+      verifyArray(resUnique, res2);
+    };
+
+    test2("aa");
+    test2("aba");
+    test2("abab");
   });
 
   it("Two Sum", function () {
@@ -2822,9 +2874,47 @@ describe("leetcode", function () {
       return i < 0;
     };
 
+    // This is wrong
+    var isValid3 = function (s) {
+      if (!s) return true;
+      var i;
+      var left = {
+        '(': 0,
+        '{': 0,
+        '[': 0
+      };
+      var map = {
+        ')': '(',
+        '}': '{',
+        ']': '['
+      };
+      var c;
+      for (i = 0; i < s.length; i++) {
+        c = s.charAt(i);
+        switch (c) {
+          case '(':
+          case '{':
+          case '[':
+            left[c]++;
+            break;
+          case ')':
+          case '}':
+          case ']':
+            left[map[c]]--;
+            if (left[map[c]] < 0) return false;
+            break;
+        }
+      }
+      for (c in left) {
+        if (left.hasOwnProperty(c) && left[c] >0) return false;
+      }
+      return true;
+    };
+
     var test = function (s, ans) {
       var v = isValid(s);
       var v2 = isValid2(s);
+      var v3 = isValid3(s);
       expect(v).toEqual(ans);
       expect(v2).toEqual(ans);
     };
@@ -2841,6 +2931,10 @@ describe("leetcode", function () {
         var s = randomStringOfLengthAndAlphabet(len, "(){}[]");
         var v = isValid(s);
         var v2 = isValid2(s);
+        var v3 = isValid3(s);
+        if (v != v3) {
+          console.log(s, v, v2, v3);
+        }
         expect(v).toEqual(v2);
       }
     };
@@ -2852,10 +2946,71 @@ describe("leetcode", function () {
       for (var i = 0; i < p.length; i++) {
         var v = isValid(p[i]);
         var v2 = isValid2(p[i]);
+        var v3 = isValid3(p[i]);
+        if (v != v3) {
+          console.log(p[i], v, v2, v3);
+        }
         expect(v).toEqual(v2);
       }
     };
 
     test3("(){}[]");
+  });
+
+  it("Generate Parentheses", function () {
+    var generateParentheses = function (n) {
+      var result = [];
+      var generate = function (prefix, leftCount, rightCount) {
+        if (prefix.length == 2 * n) {
+          result.push(prefix);
+          return;
+        }
+        if (leftCount < n) generate(prefix + '(', leftCount + 1, rightCount);
+        if (leftCount > rightCount) generate(prefix + ')', leftCount, rightCount + 1);
+      };
+      generate("", 0, 0);
+      return result;
+    };
+
+    var isValid = function (s) {
+      if (!s) return false;
+      var c;
+      var left = 0;
+      for (var i = 0; i < s.length; i++) {
+        c = s.charAt(i);
+        if (c == '(') {
+          left++;
+        } else if (c == ')') {
+          left--;
+          if (left < 0) return false;
+        }
+      }
+      return left == 0;
+    };
+
+    var generateParentheses2 = function (n) {
+      var result = [];
+      var s = "";
+      for (var i = 0; i < n; i++) {
+        s += "()";
+      }
+      var p = permuteStringUnique(s);
+      for (var i = 0; i < p.length; i++) {
+        if (isValid(p[i])) result.push(p[i]);
+      }
+      return result;
+    }
+
+    var test = function () {
+      for (var n = 1; n <= 10; n++) {
+        var r = generateParentheses(n);
+        var r2 = generateParentheses2(n);
+        r.sort();
+        r2.sort();
+        verifyArray(r, r2);
+      }
+    };
+
+    test();
   });
 });
