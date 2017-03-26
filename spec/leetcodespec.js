@@ -870,6 +870,131 @@ describe("leetcode", function () {
 
       test();
     });
+
+    it("Merge k Sorted Lists", function () {
+      var mergeKLists = function (lists) {
+        if (!lists) return null;
+        var merge = function (l1, l2) {
+          var l = null;
+          var c;
+          var n;
+          while (l1 != null && l2 != null) {
+            n = l1.val < l2.val ? l1 : l2;
+            if (l == null) {
+              l = n;
+            } else {
+              c.next = n;
+            }
+            c = n;
+            if (n == l1) l1 = l1.next;
+            else if (n == l2) l2 = l2.next;
+          }
+          n = l1 == null ? l2 : l1;
+          if (l == null) {
+            l = n;
+          } else {
+            c.next = n;
+          }
+          return l;
+        };
+        var l = lists[0];
+        for (var i = 1; i < lists.length; i++) {
+          l = merge(l, lists[i]);
+        }
+        return l;
+      };
+
+      var mergeKLists2 = function (lists) {
+        if (!lists) return null;
+        var heapify = function (array, i, key) {
+          var m = i;
+          var l = 2 * i + 1;
+          if (l < array.length && key(array[l]) < key(array[m])) m = l;
+          var r = 2 * i + 2;
+          if (r < array.length && key(array[r]) < key(array[m])) m = r;
+          if (m != i) {
+            var t = array[i];
+            array[i] = array[m];
+            array[m] = t;
+            heapify(array, m, key);
+          }
+        };
+        var make_heap = function (array, key) {
+          //                0               1 [2^(1 - 1) - 1, 2^1 - 2]
+          //          1          2          2 [2^(2 - 1) - 1, 2^2 - 2]
+          //      3        4 5       6      3 [2^(3 - 1) - 1, 2^3 - 2]
+          //               ......
+          // 2^(h - 1) - 1 ...... 2^h - 2   h [2^(h - 1) - 1, 2^h - 2]
+          var height = function (length) {
+            var h = 1;
+            var s = 1;
+            var n = 1;
+            while (s < length) {
+              n = n * 2;
+              s += n;
+              h++;
+            }
+            return h;
+          };
+          var h = height(array.length);
+          for (var i = Math.pow(2, h - 1) - 2; i >= 0; i--) {
+            heapify(array, i, key);
+          }
+        };
+        var lists2 = [];
+        for (var i = 0; i < lists.length; i++) {
+          if (lists[i]) lists2.push(lists[i]);
+        }
+        var key = function (l) { return l.val; }
+        make_heap(lists2, key);
+        var merged = null;
+        var cur;
+        while (lists2.length > 1) {
+          if (merged == null) {
+            merged = lists2[0];
+          } else {
+            cur.next = lists2[0];
+          }
+          cur = lists2[0];
+          if (lists2[0].next == null) {
+            var e = lists2.pop();
+            lists2[0] = e;
+          } else {
+            lists2[0] = lists2[0].next;
+          }
+          heapify(lists2, 0, key);
+        }
+        if (merged == null) {
+          merged = lists2[0];
+        } else {
+          cur.next = lists2[0];
+        }
+        return merged;
+      };
+
+      var test = function () {
+        for (var i = 0; i < 100; i++) {
+          var len = randomInt(1, 100);
+          var lists = [];
+          var lists2 = [];
+          for (var j = 0; j < len; j++) {
+            var a = randomArrayOfLengthMinMax(randomInt(0, 10), 0, 10);
+            a.sort(function (x, y) { return x - y; });
+            var l = arrayToList(a);
+            lists.push(l);
+            var l2 = arrayToList(a);
+            lists2.push(l2);
+          }
+          var m = mergeKLists(lists);
+          var am = listToArray(m);
+          var m2 = mergeKLists2(lists2);
+          var am2 = listToArray(m2);
+          verifyArray(am, am2);
+        }
+      };
+
+      test();
+    });
   });
 
   it("Longest Substring Without Repeating Characters", function () {
@@ -2906,7 +3031,7 @@ describe("leetcode", function () {
         }
       }
       for (c in left) {
-        if (left.hasOwnProperty(c) && left[c] >0) return false;
+        if (left.hasOwnProperty(c) && left[c] > 0) return false;
       }
       return true;
     };
