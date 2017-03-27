@@ -995,6 +995,47 @@ describe("leetcode", function () {
 
       test();
     });
+
+    it("Swap Nodes in Pairs", function () {
+      var swapPairs = function (head) {
+        if (!head) return head;
+        var current = head;
+        var next = current.next;
+        if (next == null) return head;
+        current.next = next.next;
+        next.next = current;
+        head = next;
+        var prev = current;
+        current = current.next;
+        while (current != null && current.next != null) {
+          next = current.next;
+          prev.next = next;
+          current.next = next.next;
+          next.next = current;
+          prev = current;
+          current = current.next;
+        }
+        return head;
+      };
+
+      var test = function () {
+        for (var i = 0; i < 10; i++) {
+          var len = randomInt(1, 10);
+          var a = randomArrayOfLengthMinMax(len, 0, 10);
+          var l = arrayToList(a);
+          l = swapPairs(l);
+          var a2 = listToArray(l);
+          for (var j = 1; j < a.length; j += 2) {
+            var t = a[j - 1];
+            a[j - 1] = a[j];
+            a[j] = t;
+          }
+          verifyArray(a2, a);
+        }
+      };
+
+      test();
+    });
   });
 
   it("Longest Substring Without Repeating Characters", function () {
